@@ -1,6 +1,6 @@
 # Installation
 
-## Install via composer
+## Install with composer
 See https://wpackagist.org/
 
 - Create app directory
