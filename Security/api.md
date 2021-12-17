@@ -1,6 +1,5 @@
-See https://developer.wordpress.org/rest-api/frequently-asked-questions/#require-authentication-for-all-requests
-
 # Require Authentication for All Requests
+https://developer.wordpress.org/rest-api/frequently-asked-questions/#require-authentication-for-all-requests
 
 You can require authentication for all REST API requests by adding an is_user_logged_in check to the rest_authentication_errors filter.
 
