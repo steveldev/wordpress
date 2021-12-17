@@ -1,5 +1,4 @@
 # Wordpress
-https://wordpress.org
-https://codex.wordpress.org
+https://wordpress.org | https://codex.wordpress.org
 
 
