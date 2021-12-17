@@ -1,8 +1,6 @@
 
 **esc_html()** échappe une chaîne afin qu'elle ne soit pas analysée en HTML. Des caractères comme <sont convertis &lt;, par exemple. Cela ressemblera au lecteur, mais cela signifie que si la valeur en cours de sortie est <script>alors elle ne sera pas interprétée par le navigateur comme une balise de script réelle.
 
-  **esc_html()** échappe une chaîne afin qu'elle ne soit pas analysée en HTML. Des caractères comme <sont convertis &lt;, par exemple. Cela ressemblera au lecteur, mais cela signifie que si la valeur en cours de sortie est <script>alors elle ne sera pas interprétée par le navigateur comme une balise de script réelle.
-
 Utilisez cette fonction chaque fois que la valeur en sortie ne doit pas contenir de code HTML.
 
 **esc_attr()** échappe une chaîne afin de pouvoir l'utiliser en toute sécurité dans un attribut HTML, comme class=""par exemple. Cela empêche une valeur de sortir de l'attribut HTML. Par exemple, si la valeur est "><script>alert();</script>et que vous avez essayé de la sortir dans un attribut HTML, elle fermerait la balise HTML actuelle et ouvrirait une balise de script. C'est dangereux. En échappant à la valeur, il ne sera pas en mesure de fermer l'attribut et la balise HTML et de sortir du HTML non sécurisé.
