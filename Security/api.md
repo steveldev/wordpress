@@ -11,7 +11,7 @@ You can require authentication for all REST API requests by adding an is_user_lo
 **WP_Error:** Some kind of error was encountered.
 
 	
-`
+```
 add_filter( 'rest_authentication_errors', function( $result ) {
 
     // If a previous authentication check was applied,
@@ -34,4 +34,4 @@ add_filter( 'rest_authentication_errors', function( $result ) {
     // on logged-in requests
     return $result;
 });
-`
+```
