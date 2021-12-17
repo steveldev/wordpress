@@ -1,3 +1,4 @@
+# Functions esc_
 
 **esc_html()** échappe une chaîne afin qu'elle ne soit pas analysée en HTML. Des caractères comme <sont convertis &lt;, par exemple. Cela ressemblera au lecteur, mais cela signifie que si la valeur en cours de sortie est <script>alors elle ne sera pas interprétée par le navigateur comme une balise de script réelle.
 
