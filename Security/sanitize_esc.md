@@ -18,9 +18,9 @@ Utilisez cette fonction lors de la sortie d'une valeur à l'intérieur d'un <tex
 **esc_html()** et **esc_attr()** ont également des versions se terminant par __(), _e()et _x(). Ce sont pour la sortie de chaînes traduisibles.
 
 WordPress a des fonctions, __(), _e()et _x(), pour produire du texte qui peut être traduit. 
-  **__()** renvoie une chaîne traduisible, 
-  **_e()** fait écho à une chaîne traduisible 
-  **_x()**renvoie une chaîne traduisible avec un contexte donné. Vous les avez probablement déjà vus.
+  - **__()** renvoie une chaîne traduisible,  
+  - **_e()** fait écho à une chaîne traduisible 
+  - **_x()**renvoie une chaîne traduisible avec un contexte donné. Vous les avez probablement déjà vus.
 
 Étant donné que vous ne pouvez pas nécessairement faire confiance à un fichier de traduction pour contenir des valeurs sûres, l'utilisation de ces fonctions lors de la sortie d'une chaîne traduisible garantit que les chaînes en cours de sortie ne peuvent pas provoquer le même problème décrit ci-dessus.
 
