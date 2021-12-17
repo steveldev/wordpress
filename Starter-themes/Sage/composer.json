@@ -1,0 +1,49 @@
+{
+  "name": "wordpress/wp-installer",
+  "description": "Wordpress installer",
+  "type": "wordpress-site",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    }
+  ],
+  "require": {
+    "composer/installers": "*",
+    "johnpbloch/wordpress": "*",
+    "wpackagist-plugin/classic-editor": "*",
+    "wpackagist-plugin/disable-comments": "*",
+    "wpackagist-plugin/wordpress-seo": "*",
+    "wpackagist-plugin/better-wp-security": "*",
+    "wpackagist-plugin/wp-smushit": "*",
+    "wpackagist-plugin/safe-svg":"*",
+    "wpackagist-plugin/cmb2": "*"
+  },
+  "require-dev": {
+    "wpackagist-plugin/query-monitor": "*"
+  },
+  "authors": [
+    {
+      "name": "Steve LERAT",
+      "email": "contact@reseau-net.fr"
+    }
+  ],
+  "config": {
+  },
+  "extra": {
+    "installer-paths": {
+      "resources/wpackagist-mu-plugins/{$name}/": [
+        "type:wordpress-muplugin"
+      ],
+      "resources/wpackagist-plugins/{$name}/": [
+        "type:wordpress-plugin"
+      ],
+      "resources/wpackagist-themes/{$name}/": [
+        "type:wordpress-theme"
+      ]
+    },
+    "wordpress-install-dir": "wp"
+  },
+  "scripts": {
+  }
+}
