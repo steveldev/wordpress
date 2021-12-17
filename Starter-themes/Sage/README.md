@@ -8,7 +8,7 @@ See https://wpackagist.org/
 - Run composer install
 
 ## Install Sage Theme Starter
- See https://roots.io/docs/sage/9.x/installation/
+ See https://roots.io/docs/sage/
   - In your app directory
   - Create src/themes/ directories
   - In app/src/themes/
