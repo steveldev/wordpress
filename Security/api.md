@@ -7,6 +7,7 @@ You can require authentication for all REST API requests by adding an is_user_lo
 
 **null:** no authentication check has yet been performed, and the hook callback may apply custom authentication logic.
 **boolean:** indicates a previous authentication method check was performed. Boolean true indicates the request was successfully authenticated, and boolean false indicates authentication failed.
+
 **WP_Error:** Some kind of error was encountered.
 
 	
