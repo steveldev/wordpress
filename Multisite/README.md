@@ -1,5 +1,6 @@
-Install Wordpress
+# Install Wordpress
 
+## Allow multisite
 In wp-config.php
 - Add define('WP_ALLOW_MULTISITE', true);
 
@@ -13,4 +14,4 @@ Follow instructions
   
 Refresh admin dashboard page ./wp-admin/
 
-Add new site 
+## Add new site
