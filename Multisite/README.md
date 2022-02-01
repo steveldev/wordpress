@@ -1,4 +1,5 @@
 # Install Wordpress
+https://fr.wordpress.org/support/article/create-a-network/
 
 ## Allow multisite
 In wp-config.php
