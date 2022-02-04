@@ -1,0 +1,15 @@
+{   
+    "editor.minimap.enabled": false,
+    "editor.formatOnSave": false,
+    "[javascript]": {
+        "editor.formatOnSave": false
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+
+    "prettier.tabWidth": 4,
+    "prettier.proseWrap": "never",
+
+    "intelephense.format.enable": false
+}
