@@ -14,7 +14,7 @@
     "wpackagist-plugin/classic-editor": "*",
     "wpackagist-plugin/disable-comments": "*",
     "wpackagist-plugin/wordpress-seo": "*",
-    "wpackagist-plugin/better-wp-security": "*",
+    "wpackagist-plugin/better-wp-security": "*"
   },
   "require-dev": {
     "wpackagist-plugin/query-monitor": "*"
