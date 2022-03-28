@@ -1,6 +1,8 @@
 <?php 
 /**
  * Plugin Name: WP React Plugin
+ * Author: Steve LERAT (contact@reseau-net.fr)
+ * Author URI: https://reseau-net.fr
  */
 
 defined( 'ABSPATH' ) || die();
