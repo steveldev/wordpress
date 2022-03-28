@@ -1,8 +1,10 @@
 # Install wp-scripts
 
+```
 npm init
 npm install @wordpress/scripts --save-dev
 npm start
+```
 
 # Create plugin
 
