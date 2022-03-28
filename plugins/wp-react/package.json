@@ -1,0 +1,17 @@
+{
+  "name": "wp-react-plugin",
+  "version": "1.0.0",
+  "description": "Wordpress React Plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "wp-scripts build",
+    "start": "wp-scripts start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/scripts": "^22.3.0"
+  }
+}
