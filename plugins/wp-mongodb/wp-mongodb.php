@@ -34,7 +34,6 @@ class WPMongoDB {
      * @see https://www.mongodb.com/docs/drivers/php/
      * 'mongodb+srv://<username>:<password>@<cluster-address>/test?retryWrites=true&w=majority'
      */ 
-    //'mongodb+srv://<username>:<password>@<cluster-address>/test?retryWrites=true&w=majority'
     public function mongodb_connector() {
 
         if( is_admin() ) return ;
