@@ -18,8 +18,8 @@ class WPMongoDB {
 
 
     public function __construct() {
-      //  add_action('init', [$this, 'mongodb_connector'] );   
-        add_action('rest_api_init', [$this, 'add_api_route'] ); // Fires when preparing to serve a REST API request.   
+      add_action('init', [$this, 'mongodb_connector'] );   
+       // add_action('rest_api_init', [$this, 'add_api_route'] ); // Fires when preparing to serve a REST API request.   
     }
 /*
 
@@ -144,12 +144,12 @@ class WPMongoDB {
             
             // test autoloader
             if(false == $this->test_autoloader()) {
-                return 'Error : Autoloader not found. <br/>Run : composer install';
+               // return 'Error : Autoloader not found. <br/>Run : composer install';
             };
 
             // test mongoDB PHP Driver
             if(false == $this->test_mongodb_php_driver()) {
-                return sprintf( 
+               // return sprintf( 
                     'Error : MongoDB PHP Driver not found<br>Class %s not found
                     <br>See <a href="%s" target="_blank">%s</a><br>',
                     self::DRIVER_CLASS,
@@ -172,9 +172,9 @@ class WPMongoDB {
             $db          = $client->$db;
             $collections = $db->listCollections();            
 
-            return $collections;
+            //return $collections;
             // render
-           // $this->render( $collections );
+           $this->render( $collections );
 
       //  endif;
 
