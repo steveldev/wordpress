@@ -1,9 +1,9 @@
 <?php
 defined( 'ABSPATH' ) || die();
 return [
-    'host' => 'localhost',
-    'port' => '27017',
-    'user' => 'root',
+    'host' => '',
+    'port' => '',
+    'user' => '',
     'pass' => '',
-    'base' => 'test',
+    'base' => '',
 ];
