@@ -10,4 +10,4 @@
 # How to use
 - Activate plugin
 - Edit wp-mongodb/mogo.config.php
-
+- Access to homepage with administrator account
