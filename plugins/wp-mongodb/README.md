@@ -5,6 +5,7 @@
 - Edit php.ini
 
 ## 2- Install PHP library 
+In plugin directory (/wp-content/plugins/wp-mongodb/)
 - Run composer require mongodb/mongodb
 
 # How to use
