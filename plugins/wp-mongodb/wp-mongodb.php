@@ -86,8 +86,8 @@ class WPMongoDB {
         // set db_string
         $this->db_string = sprintf(
                             'mongodb://%s:%s', 
-                            $this->db_config['db_host'], 
-                            $this->db_config['db_port'] 
+                            $this->db_config['host'], 
+                            $this->db_config['port'] 
                         );        
     }
 
@@ -121,13 +121,13 @@ class WPMongoDB {
             $this->load_mongodb_config();
 
             // set default database
-            if( empty( $this->db_config['db_base'] )) {
-                $this->db_config['db_base'] = 'test';
+            if( empty( $this->db_config['base'] )) {
+                $this->db_config['base'] = 'test';
             } 
 
             // connector
             $client      = new MongoDB\Client($this->db_string);
-            $db          = $this->db_config['db_base'];
+            $db          = $this->db_config['base'];
             $db          = $client->$db;
             $collections = $db->listCollections();            
 
