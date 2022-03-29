@@ -18,8 +18,8 @@ class WPMongoDB {
 
 
     public function __construct() {
-        add_action('init', [$this, 'test_autoloader'] );
-        add_action('init', [$this, 'mongodb_connector'] );       
+      //  add_action('init', [$this, 'mongodb_connector'] );   
+        add_action('rest_api_init', [$this, 'add_api_route'] ); // Fires when preparing to serve a REST API request.   
     }
 /*
 
@@ -44,7 +44,7 @@ class WPMongoDB {
     public function test_autoloader() {
         $autoloader  = __DIR__.'/vendor/autoload.php';
         if(!file_exists( $autoloader )) {
-            wp_die('Error : Autoloader not found. <br/>Run : composer install');
+            return false;
         } else {    
             require $autoloader;
         }
@@ -55,16 +55,32 @@ class WPMongoDB {
      */
     public function test_mongodb_php_driver() {        
         if( !class_exists( self::DRIVER_CLASS ) ) {
-            wp_die( sprintf( 
-                'Error : MongoDB PHP Driver not found
-                <br>Class %s not found
-                <br>See <a href="%s" target="_blank">%s</a><br>',
-                self::DRIVER_CLASS,
-                'https://www.mongodb.com/docs/drivers/php/',
-                'MongoDB PHP Driver '
-            ));                
+            return false;              
         }
     }
+
+        
+    /**
+     * Add new API entry 
+     * ./wp-json/api/demo
+     */
+
+    public function add_api_route(WP_REST_Server $wp_rest_server) {        
+
+        register_rest_route('api','/mongodb' , [
+            'methods'  => 'GET',
+            'callback' => function (WP_REST_Request  $request) {
+
+                // get mongoDB data
+                $data = $this->mongodb_connector();
+                var_dump($data);die();
+                // output
+                return ['data' => $data, 'success' => 'Hey !!'];
+            }
+        ]);
+    }
+
+
 
     /** 
      * Get MongoDB configuration
@@ -84,11 +100,23 @@ class WPMongoDB {
         }
 
         // set db_string
-        $this->db_string = sprintf(
-                            'mongodb://%s:%s', 
-                            $this->db_config['host'], 
-                            $this->db_config['port'] 
-                        );        
+        if($this->db_config['host'] == 'localhost') {
+            $this->db_string = sprintf(
+                'mongodb://%s:%s', 
+                $this->db_config['host'], 
+                $this->db_config['port'] 
+            );   
+
+        } else {
+            $this->db_string = sprintf(
+                'mongodb://%s:%s@%s:%s', 
+                $this->db_config['user'], 
+                $this->db_config['pass'],
+                $this->db_config['host'], 
+                $this->db_config['port'] 
+            );   
+
+        }     
     }
 
     /**
@@ -110,12 +138,25 @@ class WPMongoDB {
     */     
     public function mongodb_connector() {
 
-        if( is_admin() ) return;
+       // if( is_admin() ) return;
 
-        if( current_user_can('editor') || current_user_can('administrator') ) :
+      //  if( current_user_can('editor') || current_user_can('administrator') ) :
             
+            // test autoloader
+            if(false == $this->test_autoloader()) {
+                return 'Error : Autoloader not found. <br/>Run : composer install';
+            };
+
             // test mongoDB PHP Driver
-            $this->test_mongodb_php_driver();
+            if(false == $this->test_mongodb_php_driver()) {
+                return sprintf( 
+                    'Error : MongoDB PHP Driver not found<br>Class %s not found
+                    <br>See <a href="%s" target="_blank">%s</a><br>',
+                    self::DRIVER_CLASS,
+                    'https://www.mongodb.com/docs/drivers/php/',
+                    'MongoDB PHP Driver '
+                );  
+            }
 
             // load mongoDB configuration / populate $this->db_config
             $this->load_mongodb_config();
@@ -131,10 +172,13 @@ class WPMongoDB {
             $db          = $client->$db;
             $collections = $db->listCollections();            
 
+            return $collections;
             // render
-            $this->render( $collections );
+           // $this->render( $collections );
 
-        endif;
+      //  endif;
+
+        
     }
 
     /**
