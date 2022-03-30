@@ -52,7 +52,7 @@ class WPMongoDB {
 
         
     /**
-     * Add new API entry : site_url() . '/wp-json/api/demo'
+     * Add new API entry : site_url() . '/wp-json/api/mongodb'
      */
     public function add_api_route(WP_REST_Server $wp_rest_server) {        
 
