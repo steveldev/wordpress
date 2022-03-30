@@ -18,8 +18,7 @@ class WPMongoDB {
     private $db_string;
 
 
-    public function __construct() {
-      //  add_action('init', [$this, 'mongodb_connector'] );   
+    public function __construct() {  
         add_action('rest_api_init', [$this, 'add_api_route'] ); // Fires when preparing to serve a REST API request.   
     }
 
