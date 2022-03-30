@@ -18,10 +18,9 @@ class WPMongoDB {
     private $db_string;
 
 
-    public function __construct() {  
+    public function __construct() {
         add_action('rest_api_init', [$this, 'add_api_route'] ); // Fires when preparing to serve a REST API request.   
     }
-
 
     /**
      * Testing autoloader 
@@ -36,7 +35,7 @@ class WPMongoDB {
     }
 
     /**
-     * Testing  MongoDB PHP Driver     
+     * Testing  MongoDB PHP Driver
      * @see https://www.mongodb.com/docs/drivers/php/
      */
     public function test_mongodb_php_driver() {        
@@ -52,28 +51,64 @@ class WPMongoDB {
 
         
     /**
-     * Add new API entry : site_url() . '/wp-json/api/mongodb'
+     * Add new API entry : ./wp-json/api/mongodb
      */
     public function add_api_route(WP_REST_Server $wp_rest_server) {        
 
         //  if( current_user_can('editor') || current_user_can('administrator') ) :
 
-        register_rest_route('api','/mongodb' , [
-            'methods'  => 'GET',
-            'callback' => function (WP_REST_Request  $request) {
+        /**
+         * TODO : Autodiscover MongoDB Datas
+         * @see https://developer-wordpress-org.translate.goog/rest-api/extending-the-rest-api/adding-custom-endpoints/?_x_tr_sl=auto&_x_tr_tl=fr&_x_tr_hl=fr#arguments
+         * 
+         * Possible urls :
+         * ./wp-json/api/mongodb
+         * ./wp-json/api/mongodb/database
+         * ./wp-json/api/mongodb/database/collection/        
+         * ./wp-json/api/mongodb/database/collection/id
+         * 
+         */
 
-                // get mongoDB data
-                $data = $this->mongodb_connector();
-                extract($data); // result : $code, $data
-                
-                // Create the response object
-                return new WP_REST_Response( $data, $code );
-            }
+        register_rest_route('api','/mongodb' , [
+            'methods'               => 'GET',
+            'callback'              => [$this, 'render_api_data'],
+            'permission_callback'   => '__return_true',
         ]);
         
         //  endif;
     }
 
+
+    /**
+    * Render API data
+    *
+    * @param WP_REST_Request $request
+    */
+    public function render_api_data(WP_REST_Request  $request) {
+
+        $data = [];
+
+        // tests
+            // test autoloader
+            if(!empty($this->test_autoloader() )) { $data[] = $this->test_autoloader(); }
+
+            // test mongoDB PHP Driver
+            if(!empty($this->test_mongodb_php_driver()) ) {$data[] = $this->test_mongodb_php_driver();}
+
+            // load mongoDB configuration // populate $this->db_config
+            if(!empty($this->load_mongodb_config()) ) {$data[] = $this->load_mongodb_config();}
+
+            // return errors
+            if(!empty($data)) return new WP_REST_Response( 404, $data);
+
+        // get datas
+            $client = $this->mongodb_connector();
+            $data   = $this->get_datas($client);
+            extract($data); // result : $code, $data
+        
+        // return Response
+            return new WP_REST_Response( $data, $code );
+    }
 
 
     /** 
@@ -117,49 +152,36 @@ class WPMongoDB {
      * @see https://www.mongodb.com/docs/php-library/current/reference/class/MongoDBClient/       
      */            
     public function mongodb_connector() {
-
-        $data = [];
-
-        // tests
-            // test autoloader
-            if(!empty($this->test_autoloader() )) { $data[] = $this->test_autoloader(); }
-
-            // test mongoDB PHP Driver
-            if(!empty($this->test_mongodb_php_driver()) ) {$data[] = $this->test_mongodb_php_driver();}
-
-            // load mongoDB configuration // populate $this->db_config
-            if(!empty($this->load_mongodb_config()) ) {$data[] = $this->load_mongodb_config();}
-
-            // return errors
-            if(!empty($data)) return ['code' => '404', 'data' => $data];
-
-        // set data
-
-        // connector
-            $client = new MongoDB\Client($this->db_string);
-
-            // get databases
-            $databases = $client->listDatabases();
-
-            // get databases content
-            foreach($databases as $database) {
-                $db_name = $database->getName();
-                $db      = $client->$db_name;
-
-                // get database collections
-                foreach($db->listCollections() as $collection) {
-                    $collection_name = $collection['name'];
-
-                    // get collection documents 
-                    foreach($db->$collection_name->find() as $document) {                        
-                        $data['databases'][$db_name][$collection_name][] = $document; 
-                    }
-                }                
-            }    
-
-        return ['code' => '202', 'data' => $data];
-        
+        return new MongoDB\Client($this->db_string);
     }
 
-    
+    /**
+     * Get MongoDb Datas
+     * @param MongoDB\Client $client
+     */ 
+    public function get_datas(MongoDB\Client $client) {
+        
+        // get databases
+        $databases = $client->listDatabases();
+
+        // get databases content
+        foreach($databases as $database) {
+            $db_name = $database->getName();
+            $db      = $client->$db_name;
+
+            // get database collections
+            foreach($db->listCollections() as $collection) {
+                $collection_name = $collection['name'];
+
+                $documents = $db->$collection_name->count();
+
+                // get collection documents 
+                foreach($db->$collection_name->find() as $document) {                        
+                    $data['databases'][$db_name][$collection_name][] = $document; 
+                }
+            }                
+        }    
+
+        return ['code' => '202', 'data' => $data];        
+    }
 }
