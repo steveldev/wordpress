@@ -25,29 +25,6 @@ class WPMongoDB {
 
 
     /**
-    * Manage MongoDB   
-    * @see https://www.mongodb.com/docs/php-library/current/reference/class/MongoDBClient/ 
-    */
-
-    /*
-
-    // create new database
-        $new_db = $client->test;
-        $collection = $new_db->createCollection("users");
-
-    // insert 
-        $user = [
-                    'name'  => 'user1',
-                    'email' => 'user1@domain.com',
-                    'tel'   => '0123456789',
-                ];
-        $db->$collection_name->insertOne($user);
-
-
-    */
-
-
-    /**
      * Testing autoloader 
      */
     public function test_autoloader() {
@@ -60,7 +37,8 @@ class WPMongoDB {
     }
 
     /**
-     * Testing  MongoDB PHP Driver
+     * Testing  MongoDB PHP Driver     
+     * @see https://www.mongodb.com/docs/drivers/php/
      */
     public function test_mongodb_php_driver() {        
         if( !class_exists( self::DRIVER_CLASS ) ) {
@@ -75,10 +53,8 @@ class WPMongoDB {
 
         
     /**
-     * Add new API entry 
-     * ./wp-json/api/demo
+     * Add new API entry : site_url() . '/wp-json/api/demo'
      */
-
     public function add_api_route(WP_REST_Server $wp_rest_server) {        
 
         //  if( current_user_can('editor') || current_user_can('administrator') ) :
@@ -103,7 +79,6 @@ class WPMongoDB {
 
     /** 
      * Get MongoDB configuration
-     * @return void
      */
     public function load_mongodb_config() {
 
@@ -140,22 +115,8 @@ class WPMongoDB {
 
     /**
      * Mongo connector
-     *
-     * @see https://www.mongodb.com/docs/drivers/php/
-     * 'mongodb+srv://<username>:<password>@<cluster-address>/test?retryWrites=true&w=majority' 
-     *      
-     */ 
-                
-    /*            
-        Example 1 :
-        $client      = new MongoDB\Client($mongo_cfg);
-        $db          = $client->$mongo_db;
-        $collections = $db->listCollections();
-
-        Example 2 :      
-        $manager     = new MongoDB\Driver\Manager($mongo_cfg);
-        $collection  = new MongoDB\Collection($manager, "logs","capped_logs");
-    */     
+     * @see https://www.mongodb.com/docs/php-library/current/reference/class/MongoDBClient/       
+     */            
     public function mongodb_connector() {
 
         $data = [];
@@ -189,8 +150,6 @@ class WPMongoDB {
                 // get database collections
                 foreach($db->listCollections() as $collection) {
                     $collection_name = $collection['name'];
-
-                    $documents = $db->$collection_name->count();
 
                     // get collection documents 
                     foreach($db->$collection_name->find() as $document) {                        
