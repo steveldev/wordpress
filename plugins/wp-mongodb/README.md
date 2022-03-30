@@ -2,11 +2,11 @@
 
 #  Installation
 
-## 1 - Install MongoDB PHP Driver 
+## Install MongoDB PHP Driver 
 - See https://www.mongodb.com/docs/drivers/php/
 - Edit php.ini
 
-## 2 - Install MongoDB PHP Library 
+## Install MongoDB PHP Library 
 - Go to <plugins_dir>/wp-mongodb/ 
 - Run composer require mongodb/mongodb
 
