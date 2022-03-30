@@ -1,14 +1,12 @@
 # Plugin WP MongoDB Connector
 
-1- Install PHP Extension
+## 1- Install MongoDB PHP Driver 
 - See https://www.mongodb.com/docs/drivers/php/
 - Edit php.ini
 
-
-2- Install PHP library 
-- Go to /wp-content/plugins/wp-mongodb/ and run
-
-```composer require mongodb/mongodb ```
+## 2- Install MongoDB PHP library 
+- Go to /wp-content/plugins/wp-mongodb/ 
+- Run composer require mongodb/mongodb
 
 # How to use
 - Activate plugin
