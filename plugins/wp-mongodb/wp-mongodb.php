@@ -18,8 +18,8 @@ class WPMongoDB {
 
 
     public function __construct() {
-      add_action('init', [$this, 'mongodb_connector'] );   
-       // add_action('rest_api_init', [$this, 'add_api_route'] ); // Fires when preparing to serve a REST API request.   
+      //  add_action('init', [$this, 'mongodb_connector'] );   
+        add_action('rest_api_init', [$this, 'add_api_route'] ); // Fires when preparing to serve a REST API request.   
     }
 /*
 
@@ -44,7 +44,7 @@ class WPMongoDB {
     public function test_autoloader() {
         $autoloader  = __DIR__.'/vendor/autoload.php';
         if(!file_exists( $autoloader )) {
-            return false;
+            return 'Error : Autoloader not found. <br/>Run : composer install';
         } else {    
             require $autoloader;
         }
@@ -55,7 +55,12 @@ class WPMongoDB {
      */
     public function test_mongodb_php_driver() {        
         if( !class_exists( self::DRIVER_CLASS ) ) {
-            return false;              
+            return 
+                sprintf( 
+                    'Error : MongoDB PHP Driver not found. Class %s not found. See %s',
+                    self::DRIVER_CLASS,
+                    'https://www.mongodb.com/docs/drivers/php/'
+                );  
         }
     }
 
@@ -73,9 +78,19 @@ class WPMongoDB {
 
                 // get mongoDB data
                 $data = $this->mongodb_connector();
-                var_dump($data);die();
+                extract($data); // result : $code, $data
+
+               // var_dump($data);die();
+                $data = !empty($data) ? $data : 'Connected to '.$this->db_string;
+
+                // Create the response object
+                $response = new WP_REST_Response( $data );
+                $response->set_status( $code );
+                //$response->header( 'Location', 'http://example.com/' );
+ 
+
                 // output
-                return ['data' => $data, 'success' => 'Hey !!'];
+                return $response;
             }
         ]);
     }
@@ -89,7 +104,7 @@ class WPMongoDB {
     public function load_mongodb_config() {
 
         // test mongoDB config file        
-        if(!file_exists( self::CONFIG_FILE )) wp_die('Error : MongoDB config file not found');
+        if(!file_exists( self::CONFIG_FILE )) return 'Error : MongoDB config file not found';
 
         // load mongoDB config
         $mongo_config = require( self::CONFIG_FILE );     
@@ -138,43 +153,40 @@ class WPMongoDB {
     */     
     public function mongodb_connector() {
 
+        $data = [];
        // if( is_admin() ) return;
 
       //  if( current_user_can('editor') || current_user_can('administrator') ) :
-            
+         
+        // tests
             // test autoloader
-            if(false == $this->test_autoloader()) {
-               // return 'Error : Autoloader not found. <br/>Run : composer install';
-            };
+            if(!empty($this->test_autoloader() )) { $data[] = $this->test_autoloader(); }
 
             // test mongoDB PHP Driver
-            if(false == $this->test_mongodb_php_driver()) {
-               // return sprintf( 
-                    'Error : MongoDB PHP Driver not found<br>Class %s not found
-                    <br>See <a href="%s" target="_blank">%s</a><br>',
-                    self::DRIVER_CLASS,
-                    'https://www.mongodb.com/docs/drivers/php/',
-                    'MongoDB PHP Driver '
-                );  
-            }
+            if(!empty($this->test_mongodb_php_driver()) ) {$data[] = $this->test_mongodb_php_driver();}
 
-            // load mongoDB configuration / populate $this->db_config
-            $this->load_mongodb_config();
+            // load mongoDB configuration // populate $this->db_config
+            if(!empty($this->load_mongodb_config()) ) {$data[] = $this->load_mongodb_config();}
 
+            // return errors
+            if(!empty($data)) return ['code' => '404', 'data' => $data];
+
+        // set data
             // set default database
             if( empty( $this->db_config['base'] )) {
                 $this->db_config['base'] = 'test';
             } 
 
-            // connector
-            $client      = new MongoDB\Client($this->db_string);
-            $db          = $this->db_config['base'];
-            $db          = $client->$db;
-            $collections = $db->listCollections();            
+        // connector
+            $client = new MongoDB\Client($this->db_string);
+            $db     = $this->db_config['base'];
+            $db     = $client->$db;
+            $data   = $db->listCollections();            
 
-            //return $collections;
-            // render
-           $this->render( $collections );
+        return ['code' => '202', 'data' => $data];
+        
+        // render
+           // $this->render( $collections );
 
       //  endif;
 
