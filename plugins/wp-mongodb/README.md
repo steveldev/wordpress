@@ -6,7 +6,8 @@
 
 
 2- Install PHP library 
-- Run composer require mongodb/mongodb
+- Go to /wp-content/plugins/wp-mongodb/ and Run 
+```Run composer require mongodb/mongodb ```
 
 # How to use
 - Activate plugin
