@@ -5,10 +5,10 @@
 - Edit php.ini
 
 ## 2- Install MongoDB PHP library 
-- Go to /wp-content/plugins/wp-mongodb/ 
+- Go to <plugins_dir>/wp-mongodb/ 
 - Run composer require mongodb/mongodb
 
 # How to use
 - Activate plugin
-- Edit wp-mongodb/mogo.config.php
+- Edit <plugins_dir>/wp-mongodb/mogo.config.php
 - Connect to <site_url>/wp-json/api/mongodb
