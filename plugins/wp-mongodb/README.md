@@ -11,7 +11,7 @@
 - Run composer require mongodb/mongodb
 
 # Configuration
-- Edit <plugins_dir>/wp-mongodb/mogo.config.php
+- Edit <plugins_dir>/wp-mongodb/mongo.config.php
 
 # How to use
 - Activate plugin
