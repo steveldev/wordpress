@@ -1,10 +1,11 @@
 <?php
-defined( 'ABSPATH' ) || die();
 /**
  * Plugin Name: WP MongoDB Connector
  * Author: Steve LERAT (contact@reseau-net.fr)
  * Author URI: https://reseau-net.fr
  */
+
+defined( 'ABSPATH' ) || die();
 
 new WPMongoDB();
 
@@ -21,22 +22,30 @@ class WPMongoDB {
       //  add_action('init', [$this, 'mongodb_connector'] );   
         add_action('rest_api_init', [$this, 'add_api_route'] ); // Fires when preparing to serve a REST API request.   
     }
-/*
 
-    public function create() {
-        $bulk = new MongoDB\Driver\BulkWrite;
-        $bulk->insert(['x' => 1]);
-        $bulk->insert(['x' => 2]);
-        $bulk->insert(['x' => 3]);
-        $manager->executeBulkWrite('db.collection', $bulk);
-    }
-    public function read() {}
 
-    public function update() {}
+    /**
+    * Manage MongoDB   
+    * @see https://www.mongodb.com/docs/php-library/current/reference/class/MongoDBClient/ 
+    */
 
-    public function delete() {}
+    /*
 
-*/
+    // create new database
+        $new_db = $client->test;
+        $collection = $new_db->createCollection("users");
+
+    // insert 
+        $user = [
+                    'name'  => 'user1',
+                    'email' => 'user1@domain.com',
+                    'tel'   => '0123456789',
+                ];
+        $db->$collection_name->insertOne($user);
+
+
+    */
+
 
     /**
      * Testing autoloader 
@@ -72,6 +81,8 @@ class WPMongoDB {
 
     public function add_api_route(WP_REST_Server $wp_rest_server) {        
 
+        //  if( current_user_can('editor') || current_user_can('administrator') ) :
+
         register_rest_route('api','/mongodb' , [
             'methods'  => 'GET',
             'callback' => function (WP_REST_Request  $request) {
@@ -79,20 +90,13 @@ class WPMongoDB {
                 // get mongoDB data
                 $data = $this->mongodb_connector();
                 extract($data); // result : $code, $data
-
-               // var_dump($data);die();
-                $data = !empty($data) ? $data : 'Connected to '.$this->db_string;
-
+                
                 // Create the response object
-                $response = new WP_REST_Response( $data );
-                $response->set_status( $code );
-                //$response->header( 'Location', 'http://example.com/' );
- 
-
-                // output
-                return $response;
+                return new WP_REST_Response( $data, $code );
             }
         ]);
+        
+        //  endif;
     }
 
 
@@ -138,7 +142,8 @@ class WPMongoDB {
      * Mongo connector
      *
      * @see https://www.mongodb.com/docs/drivers/php/
-     * 'mongodb+srv://<username>:<password>@<cluster-address>/test?retryWrites=true&w=majority'           
+     * 'mongodb+srv://<username>:<password>@<cluster-address>/test?retryWrites=true&w=majority' 
+     *      
      */ 
                 
     /*            
@@ -154,10 +159,7 @@ class WPMongoDB {
     public function mongodb_connector() {
 
         $data = [];
-       // if( is_admin() ) return;
 
-      //  if( current_user_can('editor') || current_user_can('administrator') ) :
-         
         // tests
             // test autoloader
             if(!empty($this->test_autoloader() )) { $data[] = $this->test_autoloader(); }
@@ -172,47 +174,34 @@ class WPMongoDB {
             if(!empty($data)) return ['code' => '404', 'data' => $data];
 
         // set data
-            // set default database
-            if( empty( $this->db_config['base'] )) {
-                $this->db_config['base'] = 'test';
-            } 
 
         // connector
             $client = new MongoDB\Client($this->db_string);
-            $db     = $this->db_config['base'];
-            $db     = $client->$db;
-            $data   = $db->listCollections();            
+
+            // get databases
+            $databases = $client->listDatabases();
+
+            // get databases content
+            foreach($databases as $database) {
+                $db_name = $database->getName();
+                $db      = $client->$db_name;
+
+                // get database collections
+                foreach($db->listCollections() as $collection) {
+                    $collection_name = $collection['name'];
+
+                    $documents = $db->$collection_name->count();
+
+                    // get collection documents 
+                    foreach($db->$collection_name->find() as $document) {                        
+                        $data['databases'][$db_name][$collection_name][] = $document; 
+                    }
+                }                
+            }    
 
         return ['code' => '202', 'data' => $data];
         
-        // render
-           // $this->render( $collections );
-
-      //  endif;
-
-        
     }
 
-    /**
-     * Render MongoDBData collections
-     * 
-     */
-    public function render($collections) {
-            
-        echo 'Connected to '.$this->db_string;
-            
-        // debug
-        echo '<pre>';
-        print_r($collections);
-        echo '</pre>';   
-
-        // loop on collections
-        foreach ($collections as $col) {
-            echo $col->getName();
-        }
-
-        // stop scripts
-        exit;
-    }
     
 }
