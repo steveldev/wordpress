@@ -6,11 +6,15 @@ https://fr.wordpress.org/
 ## Install with composer
 See https://wpackagist.org/
 
-- Create app directory
-- In app directory
-- Copy composer.json
-- Run composer install
+```
+mkdir app
+cd app
+# copy composer.json from https://github.com/steveldev/wordpress/blob/main/Install/composer.json
+composer install
+```
 - Add Symilinks
+ll
+
 
 ## Install with SSH
 ```
