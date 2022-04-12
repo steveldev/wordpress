@@ -13,7 +13,7 @@ cd app
 composer install
 ```
 - Add Symilinks
-ll
+
 
 
 ## Install with SSH
