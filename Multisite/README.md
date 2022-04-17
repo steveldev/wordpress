@@ -4,7 +4,6 @@
 https://github.com/steveldev/wordpress/tree/main/Install
 
 ## Create network 
-https://fr.wordpress.org/support/article/create-a-network/
 
 ### Allow multisite
 File : wp-config.php  
@@ -25,38 +24,6 @@ Refresh admin dashboard page ./wp-admin/
 ## Configurations 
 This var set subdonaim or subfolder : define( 'SUBDOMAIN_INSTALL', true );
 
-### SubDomain
-File : wp-config.php
-```
-/* Multisite */
-define( 'WP_ALLOW_MULTISITE', true );
-
-define( 'MULTISITE', true );
-define( 'SUBDOMAIN_INSTALL', true );
-define( 'DOMAIN_CURRENT_SITE', 'mydomain.fr' );
-define( 'PATH_CURRENT_SITE', '/' );
-define( 'SITE_ID_CURRENT_SITE', 1 );
-define( 'BLOG_ID_CURRENT_SITE', 1 );
-```
-
-File : .htaccess
-```
-# BEGIN WordPress
-RewriteEngine On
-RewriteBase /
-RewriteRule ^index.php$ - [L]
- 
-# add a trailing slash to /wp-admin
-RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
- 
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
-RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
-RewriteRule ^(.*\.php)$ wp/$1 [L]
-RewriteRule . index.php [L]
-# END WordPress
-```
 
 ### SubFolder
 File : wp-config.php
@@ -94,6 +61,49 @@ RewriteRule . index.php [L]
 # END WordPress
 ```
 
+### SubDomain
+File : wp-config.php
+```
+/* Multisite */
+define( 'WP_ALLOW_MULTISITE', true );
+
+define( 'MULTISITE', true );
+define( 'SUBDOMAIN_INSTALL', true );
+define( 'DOMAIN_CURRENT_SITE', 'mydomain.fr' );
+define( 'PATH_CURRENT_SITE', '/' );
+define( 'SITE_ID_CURRENT_SITE', 1 );
+define( 'BLOG_ID_CURRENT_SITE', 1 );
+```
+
+File : .htaccess
+```
+# BEGIN WordPress
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index.php$ - [L]
+ 
+# add a trailing slash to /wp-admin
+RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
+ 
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
+RewriteRule ^(.*\.php)$ wp/$1 [L]
+RewriteRule . index.php [L]
+# END WordPress
+```
+
+## Create network
+https://fr.wordpress.org/support/article/create-a-network/
+https://wordpress.org/support/article/before-you-create-a-network/
+
+## Domain mapping 
+https://github.com/steveldev/wordpress/blob/main/Multisite/Domain_Mapping.md
+https://wordpress.org/support/article/wordpress-multisite-domain-mapping/
+
+# Wildcard 
+https://fr.wordpress.org/support/article/configuring-wildcard-subdomains/
 
 ## Switch Multisite Configuration :  
 https://wordpress.org/support/article/multisite-network-administration/#switching-network-types
