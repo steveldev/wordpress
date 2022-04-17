@@ -23,7 +23,7 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
   - Site url : site.mydomain.com
 
 
-## ENVIRONNEMENT : CPANEL (o2witch) 
+## ENVIRONNEMENT (mydomain.com) : 
 
 ### Configuration du domaine mydomain.com
 
@@ -32,7 +32,7 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
   - Document root  : public_html/wordpress/multisite/wp
 
 ### Configuration des Certificats SSL
-  https://faq.o2switch.fr/hebergement-mutualise/tutoriels-cpanel/lets-encrypt-certificat-ssl
+  CPANEL (o2witch) : https://faq.o2switch.fr/hebergement-mutualise/tutoriels-cpanel/lets-encrypt-certificat-ssl  
   
  #### Certificat SSL mydomain.com 
   - Domaine : mydomain.com 
@@ -48,11 +48,14 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
   - Soit : générer un certificat SLL pour chaque sous domaine
   - Soit : installer le certifcat wildcard pour tous les sous domaines dans la configuration SSL/TLS
 
-### Configuration d'un domaine pontant vers un site du multisite
+
+## ENVIRONNEMENT (external.com) : 
  
-#### Configuration du nom de domaine 
+### Configuration du nom de domaine 
 - Nom de domaine : external.com 
 - DNS CNAME      : **IP Mutltisite Wordpress (mydomain.com)**
  
-#### Configuration du site dans le multisite
+ 
+## WORDPRESS : 
+### Configuration du site dans le multisite
 - Site URL : external.com
