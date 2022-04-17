@@ -1,10 +1,10 @@
 # Configuration d'un Wordpress Mutlisite 
 
 ## PROJET :
-Installation d'un site Wordpress en Multisite (sous domaine).
-Les sites doivent étre accessibles depuis un nom de domaine externe.
-Le nom de domaine externe doit remplacer l'url du site dans le multisite.
-La navigation doit rester transparente pour le visiteur.
+- Installation d'un site Wordpress en Multisite (sous domaine).
+- Les sites doivent étre accessibles depuis un nom de domaine externe.
+- Le nom de domaine externe doit remplacer l'url du site dans le multisite.
+- La navigation doit rester transparente pour le visiteur.
 
 ## WORDPRESS :
 
