@@ -47,7 +47,7 @@ https://wordpress.org/support/article/create-a-network/
  
 #### Configuration du nom de domaine 
 - Nom de domaine : external.com 
-- Document Root  :   mydomain.com
+- DNS CNAME  :   IP Mutltisite Wordpress
  
 #### Configuration du site dans le multisite
 - Site URL : external.com
