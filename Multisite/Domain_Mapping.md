@@ -1,4 +1,10 @@
-# Configuration d'un Wordpress Mutlisite en Sous-Domaine
+# Configuration d'un Wordpress Mutlisite 
+
+## PROJET :
+Installation d'un site Wordpress en Multisite (sous domaine).
+Les sites doivent étre accessibles depuis un nom de domaine externe.
+Le nom de domaine externe doit remplacer l'url du site dans le multisite.
+La navigation doit rester transparente pour le visiteur.
 
 ## WORDPRESS :
 
@@ -11,6 +17,7 @@ https://wordpress.org/support/article/create-a-network/
 - Créer multisite 
   - Nom de domaine : mydomain.com , 
   - Document root  : public_html/wordpress/multisite/wp
+  - Mode           : sous domaine
 - Créer un site dans le multisite : 
   - Site url : site.mydomain.com
 
