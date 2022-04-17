@@ -1,4 +1,4 @@
-#Wordpress Multisite 
+# Wordpress Multisite 
 
 ## Install Wordpress
 https://github.com/steveldev/wordpress/tree/main/Install
@@ -95,9 +95,5 @@ RewriteRule . index.php [L]
 ```
 
 
-
-
-
-## More 
-Swith Multisite Configuration :  
+## Swith Multisite Configuration :  
 https://wordpress.org/support/article/multisite-network-administration/#switching-network-types
