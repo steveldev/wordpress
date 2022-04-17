@@ -1,4 +1,4 @@
-# Configuration d'un Wordpress Mutlisite 
+# Configuration d'un Wordpress Mutlisite (sous-domaine)
 
 ## PROJET :
 - Installation d'un site Wordpress en Multisite (sous domaine).
