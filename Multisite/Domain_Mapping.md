@@ -59,3 +59,18 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
 ## WORDPRESS : 
 ### Modification du site dans le multisite
 - Site URL : external.com
+
+
+# Documentation
+## Create network
+https://wordpress.org/support/article/create-a-network/  
+https://wordpress.org/support/article/before-you-create-a-network/
+
+## Domain mapping 
+https://wordpress.org/support/article/wordpress-multisite-domain-mapping/
+
+## Wildcard 
+https://wordpress.org/support/article/configuring-wildcard-subdomains/
+
+## Switch Multisite Configuration :  
+https://wordpress.org/support/article/multisite-network-administration/#switching-network-types
