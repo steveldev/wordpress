@@ -52,7 +52,7 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
  
 #### Configuration du nom de domaine 
 - Nom de domaine : external.com 
-- DNS CNAME      : **IP Mutltisite Wordpress**
+- DNS CNAME      : **IP Mutltisite Wordpress (mydomain.com)**
  
 #### Configuration du site dans le multisite
 - Site URL : external.com
