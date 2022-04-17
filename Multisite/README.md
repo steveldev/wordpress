@@ -95,11 +95,11 @@ RewriteRule . index.php [L]
 ```
 
 ## Create network
-https://fr.wordpress.org/support/article/create-a-network/
+https://fr.wordpress.org/support/article/create-a-network/  
 https://wordpress.org/support/article/before-you-create-a-network/
 
 ## Domain mapping 
-https://github.com/steveldev/wordpress/blob/main/Multisite/Domain_Mapping.md
+https://github.com/steveldev/wordpress/blob/main/Multisite/Domain_Mapping.md  
 https://wordpress.org/support/article/wordpress-multisite-domain-mapping/
 
 # Wildcard 
