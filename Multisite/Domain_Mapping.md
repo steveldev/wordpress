@@ -14,7 +14,7 @@ https://github.com/steveldev/wordpress/blob/main/Install/
 - Run composer install
 
 #### Configuration du Multisite :
-https://github.com/steveldev/wordpress/tree/main/Multisite#readme
+https://github.com/steveldev/wordpress/tree/main/Multisite
 - Créer multisite 
   - Nom de domaine : mydomain.com , 
   - Document root  : public_html/wordpress/multisite/wp
