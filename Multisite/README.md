@@ -1,18 +1,24 @@
-# Install Wordpress
+#Wordpress Multisite 
+
+## Install Wordpress
+https://github.com/steveldev/wordpress/tree/main/Install
+
+## Create network 
 https://fr.wordpress.org/support/article/create-a-network/
 
-## Allow multisite
-In wp-config.php
-- Add define('WP_ALLOW_MULTISITE', true);
+### Allow multisite
+In wp-config.php  
+- Add define('WP_ALLOW_MULTISITE', true);  
 
 Refresh admin dashboard page ./wp-admin/
-- Go to Outils > Création du réseau
+- Menu Outils > Création du réseau
+- Edit wp-config.php
+- Edit .htaccess
+- Logout / login as super admin
 
-Follow instructions
-- Create network
-- Update wp-config.php
-- Update .htaccess
-  
-Refresh admin dashboard page ./wp-admin/
+- Create new site
 
-## Add new site
+
+## More 
+Swith Multisite Configuration :  
+https://wordpress.org/support/article/multisite-network-administration/#switching-network-types
