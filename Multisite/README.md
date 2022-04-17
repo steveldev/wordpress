@@ -94,7 +94,7 @@ RewriteRule . index.php [L]
 # END WordPress
 ```
 
-# More documentation
+# Documentation
 ## Create network
 https://wordpress.org/support/article/create-a-network/  
 https://wordpress.org/support/article/before-you-create-a-network/
