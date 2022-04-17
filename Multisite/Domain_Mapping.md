@@ -57,5 +57,5 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
  
  
 ## WORDPRESS : 
-### Configuration du site dans le multisite
+### Modification du site dans le multisite
 - Site URL : external.com
