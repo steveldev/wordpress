@@ -95,5 +95,5 @@ RewriteRule . index.php [L]
 ```
 
 
-## Swith Multisite Configuration :  
+## Switch Multisite Configuration :  
 https://wordpress.org/support/article/multisite-network-administration/#switching-network-types
