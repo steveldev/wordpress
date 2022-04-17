@@ -61,7 +61,7 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
 - Site URL : external.com
 - 
 ### Cookie configuration
-File : wp-config
+File : wp-config  
 ```define('COOKIE_DOMAIN', $_SERVER['HTTP_HOST']);```
 
 
