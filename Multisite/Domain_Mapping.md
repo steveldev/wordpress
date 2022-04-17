@@ -9,8 +9,8 @@
 ## WORDPRESS :
 
 ### Installation de Wordpress via composer 
-https://github.com/steveldev/wordpress/blob/main/Install/
-- Copy composer.json
+- Création du dossier public_html/wordpress/multisite/
+- Copy composer.json from https://github.com/steveldev/wordpress/blob/main/Install/
 - Run composer install
 
 #### Configuration du Multisite :
