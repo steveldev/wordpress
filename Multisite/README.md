@@ -7,7 +7,7 @@ https://github.com/steveldev/wordpress/tree/main/Install
 https://fr.wordpress.org/support/article/create-a-network/
 
 ### Allow multisite
-In wp-config.php  
+File : wp-config.php  
 - Add define('WP_ALLOW_MULTISITE', true);  
 
 ### Create Network
@@ -26,7 +26,7 @@ Refresh admin dashboard page ./wp-admin/
 This var set subdonaim or subfolder : define( 'SUBDOMAIN_INSTALL', true );
 
 ### SubDomain
-**File : wp-config.php
+**File : wp-config.php**
 ```
 /* Multisite */
 define( 'WP_ALLOW_MULTISITE', true );
@@ -39,7 +39,7 @@ define( 'SITE_ID_CURRENT_SITE', 1 );
 define( 'BLOG_ID_CURRENT_SITE', 1 );
 ```
 
-**File : .htaccess
+**File : .htaccess**
 ```
 # BEGIN WordPress
 RewriteEngine On
@@ -59,7 +59,7 @@ RewriteRule . index.php [L]
 ```
 
 ### SubFolder
-**File : wp-config.php
+**File : wp-config.php**
 define( 'SUBDOMAIN_INSTALL', false );
 
 ```
@@ -75,7 +75,7 @@ define( 'BLOG_ID_CURRENT_SITE', 1 );
 ```
 
 
-**File : .htaccess
+**File : .htaccess**
 ```
 # BEGIN WordPress
 RewriteEngine On
