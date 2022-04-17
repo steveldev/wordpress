@@ -10,12 +10,15 @@ https://fr.wordpress.org/support/article/create-a-network/
 In wp-config.php  
 - Add define('WP_ALLOW_MULTISITE', true);  
 
+### Create Network
 Refresh admin dashboard page ./wp-admin/
 - Menu Outils > Création du réseau
 - Edit wp-config.php
 - Edit .htaccess
-- Logout / login as super admin
+- Logout 
 
+### Create site
+- login as super admin
 - Create new site
 
 
