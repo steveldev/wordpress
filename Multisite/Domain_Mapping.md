@@ -55,4 +55,5 @@ https://wordpress.org/support/article/create-a-network/
 ### Tests : 
   - Mutlisite : sites.reseau-net.fr
   - Site URL  : tests.sites.reseau-net.fr => test.reseau-net.fr
-  - External  : tests.reseau-net.fr
+  - External  : tests.reseau-net.fr > /public_html/wordpress/multisite/wp
+
