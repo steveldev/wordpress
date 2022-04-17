@@ -48,7 +48,7 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
   - Soit : générer un certificat SLL pour chaque sous domaine
   - Soit : installer le certifcat wildcard pour tous les sous domaines dans la configuration SSL/TLS
 
-### Congifuration d'un domaine pontant vers un site du multisite
+### Configuration d'un domaine pontant vers un site du multisite
  
 #### Configuration du nom de domaine 
 - Nom de domaine : external.com 
