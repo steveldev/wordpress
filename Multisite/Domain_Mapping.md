@@ -26,20 +26,24 @@ https://wordpress.org/support/article/create-a-network/
 
 ### Configuration du domaine mydomain.com
 
-#### Création d'un wildcard pour le domain 
+#### Création d'un wildcard pour le domaine
   - Nom de domaine : *.mydomain.com 
   - Document root  : public_html/wordpress/multisite/wp
 
 ### Configuration des Certificats SSL
   https://faq.o2switch.fr/hebergement-mutualise/tutoriels-cpanel/lets-encrypt-certificat-ssl
+  
+ #### Certificat SSL mydomain.com 
+  - Domaine : mydomain.com 
+  - Option  : http-01
  
-#### Création Certificat SSL Wildcard
+#### Certificat SSL Wildcard
   - Domaine : *.mydomain.com 
-  - Option  : *dns-01
+  - Option  : dns-01
 
-#### Certificat SLL <site>.mydomain.com
+#### Certificat SLL Wildcard *.mydomain.com
+  Par défaut, les sous domaine n'héritent pas du certificat SSL du wildcard
   Configuration du certificat pour tous les sous domaines
-  Par défaut, les sous domaine n'héritent pas du carticat SSL du wildcard
   - Soit : générer un certificat SLL pour chaque sous domaine
   - Soit : installer le certifcat wildcard pour tous les sous domaines dans la configuration SSL/TLS
 
@@ -51,9 +55,3 @@ https://wordpress.org/support/article/create-a-network/
  
 #### Configuration du site dans le multisite
 - Site URL : external.com
-
-### Tests : 
-  - Mutlisite : sites.reseau-net.fr
-  - Site URL  : tests.sites.reseau-net.fr => test.reseau-net.fr
-  - External  : tests.reseau-net.fr > /public_html/wordpress/multisite/wp
-
