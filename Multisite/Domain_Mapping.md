@@ -59,6 +59,10 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
 ## WORDPRESS : 
 ### Modification du site dans le multisite
 - Site URL : external.com
+- 
+### Cookie configuration
+File : wp-config
+```define('COOKIE_DOMAIN', $_SERVER['HTTP_HOST']);```
 
 
 # Documentation
