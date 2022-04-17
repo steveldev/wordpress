@@ -43,7 +43,7 @@ https://github.com/steveldev/wordpress/tree/main/Multisite
   - Option  : dns-01
 
 #### Certificat SLL Wildcard *.mydomain.com
-  Par défaut, les sous domaine n'héritent pas du certificat SSL du wildcard
+  Par défaut, les sous domaine n'héritent pas du certificat SSL du wildcard  
   Configuration du certificat pour tous les sous domaines
   - Soit : générer un certificat SLL pour chaque sous domaine
   - Soit : installer le certifcat wildcard pour tous les sous domaines dans la configuration SSL/TLS
