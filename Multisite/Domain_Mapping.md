@@ -9,11 +9,12 @@
 ## WORDPRESS :
 
 ### Installation de Wordpress via composer 
+https://github.com/steveldev/wordpress/blob/main/Install/
 - Copy composer.json
 - Run composer install
-- 
+
 #### Configuration du Multisite :
-https://wordpress.org/support/article/create-a-network/
+https://github.com/steveldev/wordpress/tree/main/Multisite#readme
 - Créer multisite 
   - Nom de domaine : mydomain.com , 
   - Document root  : public_html/wordpress/multisite/wp
