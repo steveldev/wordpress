@@ -94,6 +94,7 @@ RewriteRule . index.php [L]
 # END WordPress
 ```
 
+# More documentation
 ## Create network
 https://wordpress.org/support/article/create-a-network/  
 https://wordpress.org/support/article/before-you-create-a-network/
@@ -102,7 +103,7 @@ https://wordpress.org/support/article/before-you-create-a-network/
 https://github.com/steveldev/wordpress/blob/main/Multisite/Domain_Mapping.md  
 https://wordpress.org/support/article/wordpress-multisite-domain-mapping/
 
-# Wildcard 
+## Wildcard 
 https://wordpress.org/support/article/configuring-wildcard-subdomains/
 
 ## Switch Multisite Configuration :  
