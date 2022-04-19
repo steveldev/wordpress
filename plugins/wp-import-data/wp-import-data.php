@@ -5,6 +5,7 @@
  * Author URI: https://reseau-net.fr
  */
 
+
  /**
   * HOW TO USE
   * Create Custom post type matching keys
@@ -12,9 +13,8 @@
   * Connect to front page with "?action=menu-import" parameter
   */
 
-
-
 defined( 'ABSPATH' ) || die();
+
 new ImportApiData();
 
 class ImportApiData {
@@ -184,10 +184,9 @@ class ImportApiData {
     }
   
     public function api_url_filters() {
-        $step   = 50;
+        $limit  = 50;
         $page   = !empty($_GET['page'] )   ? (int) $_GET['page']   + 1 : 1 ;
-        $limit  = !empty($_GET['limit'] )  ? (int) $_GET['limit']  + (int) $step : (int) $step ;
-        $offset = !empty($_GET['offset'] ) ? (int) $_GET['offset'] + (int) $step -1 : 1 ;
+        $offset = !empty($_GET['offset'] ) ? (int) $_GET['offset'] + (int) $limit -1 : 1 ;
 
         $params = sprintf('?page=%d&limit=%d&offset=%d', $page, $limit, $offset);
 
