@@ -5,6 +5,14 @@
  * Author URI: https://reseau-net.fr
  */
 
+ /**
+  * HOW TO USE
+  * Create Custom post type matching keys
+  * Copy this plugin and activate it
+  * Connect to front page with "?action=menu-import" parameter
+  */
+
+
 
 defined( 'ABSPATH' ) || die();
 new ImportApiData();
