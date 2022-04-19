@@ -282,10 +282,10 @@ class ImportApiData {
         endif;       
 
 
-        // redirect to next import
         echo '<hr/>';
         echo 'Merci de patienter pendant l\'import des données';
 
+        // redirect to next import
         $params = $this->api_url_filters();
         echo '<meta http-equiv="refresh" content="10;URL='.site_url().'/'.$params.'&action=import"> ';
 
