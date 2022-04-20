@@ -6,15 +6,18 @@
  * Author URI: https://reseau-net.fr
  */
 
+defined('ABSPATH') or die();
 /*
+    NOTE : Refreash Permalinks after editing this file
+
     TODO : 
     - Get Woocommerce products
     - Get Current user Orders
     - Display services & expirations (REAL)
-
+    - user account list service : group by categories and hide/slide
+    - enqueue script
 */
 
-defined('ABSPATH') or die();
 new WPUserServicesManager();
 class WPUserServicesManager {
 
@@ -34,6 +37,8 @@ class WPUserServicesManager {
 
 
         add_action( 'woocommerce_account_services-manager_endpoint', [$this, 'user_service_manager_endpoint_render'] );
+        add_action( 'woocommerce_account_assistance_endpoint', [$this, 'user_assistance_endpoint_render'] );
+        add_action( 'woocommerce_account_parrainage_endpoint', [$this, 'user_parrainage_endpoint_render'] );
         
         //add_action('wpmu_new_blog', [$this, 'after_insert_site']); //Fires actions after insert new site
     }
@@ -48,12 +53,16 @@ class WPUserServicesManager {
         //unset( $menu_links['dashboard'] );        // Remove Dashboard
         //unset( $menu_links['payment-methods'] );  // Remove Payment Methods
         //unset( $menu_links['orders'] );           // Remove Orders
-        //unset( $menu_links['downloads'] );        // Disable Downloads
+        unset( $menu_links['downloads'] );        // Disable Downloads
         //unset( $menu_links['edit-account'] );     // Remove Account details tab
-        //unset( $menu_links['customer-logout'] );  // Remove Logout link
+        unset( $menu_links['customer-logout'] );  // Remove Logout link
 
         // add new menu item
         $menu_links['services-manager'] = "Services";
+        $menu_links['assistance']       = "Assistance";
+        $menu_links['parrainage']       = "Parrainage";
+
+        $menu_links['customer-logout'] = "Déconnexion";
 
         return $menu_links;        
     }
@@ -63,7 +72,9 @@ class WPUserServicesManager {
      * Woocommerce User Services Endpoint Permalink
     */
     function user_service_manager_endpoint_permalink() {    
-        add_rewrite_endpoint( 'services-manager', EP_PAGES );    
+        add_rewrite_endpoint( 'services-manager', EP_PAGES ); 
+        add_rewrite_endpoint( 'assistance', EP_PAGES ); 
+        add_rewrite_endpoint( 'parrainage', EP_PAGES );      
     }
 
     /**
@@ -74,9 +85,40 @@ class WPUserServicesManager {
             // Here is the place for your custom URL, it could be external
             $url = site_url().'/mon-compte/services-manager';
         }
+        if( $endpoint === 'assistance' ) {
+            // Here is the place for your custom URL, it could be external
+            $url = site_url().'/mon-compte/assistance';
+        }
+        if( $endpoint === 'parrainage' ) {
+            // Here is the place for your custom URL, it could be external
+            $url = site_url().'/mon-compte/parrainage';
+        }
+
         return $url;
     }
 
+    
+    /**
+     * Woocommerce User Services Endpoint Link (menu item)
+     */
+    function user_assistance_endpoint_render() {
+        echo '<h2>Assistance</h2>';
+        echo '
+            <ul>
+                    <li><a href="">Mise en route : configuration du compte, site, boutique, paiements</a></li>
+                    <li><a href="">Accompagnement : prise en main de wp + woo</a></li>
+                    <li><a href="">Redirection de nom de domaine</a></li>
+            </ul>
+        ';
+    }
+    
+    /**
+     * Woocommerce User Services Endpoint Link (menu item)
+     */
+    function user_parrainage_endpoint_render() {
+        echo '<h2>Parrainage</h2>';
+      
+    }
     /**
      * Woocommerce User Services Endpoint Link (menu item)
      */
@@ -84,59 +126,147 @@ class WPUserServicesManager {
 
         echo '
         <style type="text/css">
-            th, td {
-                border-bottom:1px solid silver;
-                text-align:right;
-                width:200px;
-            }
-            th:first-child, 
-            td:first-child {
-                text-align:left;
-                width:inherit;
-            }
-            .button-config { background-color:#fff;border-color:1px solid #7f54b3;}
-            .button-renew { background-color:#28a745!important;color:#fff!important;}
-            .button-config, .button-renew {border-radius:10px;}
-            
-            
+            body {box-sizing: border-box;}
+            table {border-collapse:collapse;}
+                tr:hover {background:#ddd!important;}
+                tr:hover td {background:none!important;}
+                    th {padding:.5rem 0!important;}
+                    th:first-child {padding-left:10px!important;}
+                    td {vertical-align:middle!important;padding:.5rem 0!important;}
+                    td:first-child {vertical-align:middle!important;width:30px;padding:0!important;text-align:center;}
+                    td:last-child {
+                        text-align:right;
+                        width:200px;                       
+                    }
+                    td:last-child button {margin-right:.5rem;}
+            .button-icon    {border-radius:50%; background:none!important; border:none solid silver;color:silver;padding:.2rem;}
+            .button-config  { background-color:#fff;border-color:1px solid #7f54b3;}
+            .button-config, .button-renew {border-radius:10px;}        
+            .button-renew, .button-processing, .button-on-hold  { background-color:#28a745!important;color:#fff!important;}
+
         </style>';
         echo '<h2>Gestion de vos services</h2>';
         
-        $services = $this->get_user_services();
 
+        $products = (array) $this->get_products();
+
+        $user_services = $this->get_user_services();
+
+/*
+        echo '<pre>';
+        print_r($user_services);
+        echo '</pre>';
+    */
+
+        // user current services list  
+        $current_user_services_count = !empty($user_services['current']) ? '('.count($user_services['current']).')' : '';
+        echo '<h3>Services actifs '.$current_user_services_count.'</h3>'; 
+        
+        if(!empty($user_services['current'])) : 
         echo '<table>';
+        foreach($user_services['current'] as $user_service) {
 
-            echo '<tr>';
-            foreach(array_keys($services[0]) as $col_title) {
-                echo '<th>'.ucfirst($col_title).'</th>';                
+            echo '<pre>';
+            print_r($user_service);
+            echo '</pre>';
+
+            switch($user_service['status']) {
+                case 'processing':
+                    $bouton_action = '<strong>En cours de validation</strong>';
+                    break;
+                default:
+                    $bouton_action = '<button>Configurer</button>';
+                    break;
             }
-            echo '<th></th>';
-            echo '<tr>';
 
-        foreach($services as $service) {
-            // check expiration date
-            $current_date    = strtotime(date('Y-m-d'));
-            $exipration_date = strtotime($service['expiration']);
-
-
-            if($current_date > $exipration_date) :
-                // expired service
-                $expiration = sprintf('<span style="color:red;">%s</span>', $service['expiration'] );
-                $btn_action = sprintf('<button class="button-renew">Renouveler</button>');
-            else :
-                // active service
-                $expiration = sprintf('<span style="color:green;">%s</span>', $service['expiration'] );
-                $btn_action = sprintf('<button class="button-config">Configurer</button>');
-            endif;
-
-            echo '<tr>';
-            
-                echo '<td>'.$service['name'].'</td>'; 
-                echo '<td>'.$expiration.'</td>';   
-                echo '<td>'.$btn_action.'</td>';              
-            echo '<tr>';
+            echo '<tr>';           
+                echo '
+                <td>
+                    <button class="button-icon">
+                        <span class="dashicons dashicons-arrow-right-alt2"></span>
+                    </button>
+                </td>';  
+                echo '<td>'.$user_service['product_name'].'<br><small>Expiration : '.$user_service['date_expire'].'</small></td>';  
+                echo '<td>'.$bouton_action.'</td>';   
+            echo '</tr>';
         }
         echo '</table>';
+        else: 
+            echo '<p>Vous n\'avez aucun service actif actuellement.';
+            echo '<br><a href="">Signaler un problème</a></p>';
+        endif;
+
+        // render user history services list  
+        if(!empty($user_services['history'])) :            
+            echo '<h3>Historique </h3>'; 
+            echo '<table>';
+            foreach($user_services['history'] as $user_service) {                           
+                echo '<tr>';           
+                    echo '
+                    <td>
+                        <button class="button-icon">
+                            <span class="dashicons dashicons-arrow-right-alt2"></span>
+                        </button>
+                    </td>';  
+                    echo '<td>'.$user_service['product_name'].'<br><small>Expiration : '.$user_service['date_expire'].'</small></td>';   
+                    echo '<td><button>Activer</button></td>';   
+                echo '</tr>';
+            }
+            echo '</table>';
+        endif;
+
+        // render products list (without current user service)
+        echo '<h3>Services disponibles</h3>'; 
+        echo '<table>';   
+        foreach($products as $product) {   
+            
+            $user_order_status = '';
+
+            // skip curent user services
+            if( in_array( $product->ID, array_keys($user_services['current']) ) ) continue;
+
+            // check waiting payment for matching service
+            if( in_array( $product->ID, array_keys($user_services['wait']) ) ) :
+
+                $user_service = $user_services['wait'][$product->ID]; 
+
+                switch($user_service['status']) {
+                    case 'pending':
+                        $service_informations = 'En attente de paiement';
+                        break;
+                    case 'on-hold':
+                        $service_informations = 'En attente de paiement';
+                        break;
+                    case 'cancelled':
+                        $service_informations = 'Paiement Annulé';
+                        break;
+                    case 'refunded':
+                        $service_informations = 'Remboursé';
+                        break;
+                    default:
+                        $service_informations = '';
+                        break;
+                }
+
+                $service_informations = !empty($service_informations) ? '<br>Informations : '.$service_informations : '';               
+
+            endif;
+
+            // render
+            echo '<tr>';           
+                echo '
+                <td>
+                    <button class="button-icon" style="color:silver;">
+                        <span class="dashicons dashicons-arrow-right-alt2"></span>
+                    </button>
+                </td>';  
+                echo '<td>'.$product->post_title.' '.$service_informations.'</td>'; 
+                echo '<td><button>Activer</button></td>';   
+            echo '</tr>';
+        }        
+        echo '</table>';
+
+
      
     }
 
@@ -155,29 +285,65 @@ class WPUserServicesManager {
 
 
     /**
-     * Get User Services 
+     * Get User Services ( products in orders)
+     * https://github.com/woocommerce/woocommerce/wiki/wc_get_orders-and-WC_Order_Query
+     * https://stackoverflow.com/questions/39401393/how-to-get-woocommerce-order-details
      */
     public function get_user_services() {
+        $user_services = [];
+        // TODO : 
+        // filter : older orders 
+        // filter : pagination
 
-        // TODO :
+        // user orders      
+        $user_orders = wc_get_orders([
+            'customer_id' => get_current_user_id(),
+            'orderby'     => 'date',
+            'order'       => 'DESC',
+           // 'status'      => ['completed'],
+        ]);
 
-        $user_id = get_current_user_id(); 
+        foreach($user_orders as $user_order) {
 
-        return [
-            [
-                'name'          => 'Site internet',
-                'expiration'    => date("Y-m-d", strtotime("+1 year")),
-            ],
-            [
-                'name'          => 'E-commerce',
-                'expiration'    => date("Y-m-d", strtotime("+9 month")),
-            ],
-            [
-                'name'          => 'Service 3',
-                'expiration'    => date("Y-m-d", strtotime("-3 day")),
-            ],
+            $user_order_data = $user_order->get_data(); // returns array
 
-        ];
+            // user order items 
+            $user_order_items = $user_order->get_items();
+
+            foreach($user_order_items as $user_order_item) {
+
+                // https://woocommerce.github.io/code-reference/files/woocommerce-includes-wc-order-functions.html
+
+                $product_id = $user_order_item->get_product_id();
+
+                if( $user_order->get_status() == 'completed') : 
+                    // compare expiration date
+                    $current_date    = strtotime(date('Y-m-d H:i'));
+                    $expiration_date = strtotime($user_order->get_date_modified()->date('Y-m-d H:i') . "+1 year");
+
+                    $key = $current_date > $expiration_date ? 'history' : 'current';
+                    
+                elseif( $user_order->get_status() == 'processing') :
+                    $key = 'current';
+                else : 
+                    $key = 'wait';
+                    $expiration_date = '';
+                endif;
+
+                $expiration_date = !empty($expiration_date) ? date('d-m-Y H:i', $expiration_date) : '';
+
+                $user_services[$key][$product_id] = [
+                    'product_id'        => $product_id,
+                    'quantity '         => $user_order_item->get_quantity(),
+                    'product_name'      => $user_order_item->get_name(),
+                    'status'            => $user_order->get_status(),
+                    'date_completed'    => $user_order->get_date_modified()->date('Y-m-d H:i'),
+                    'date_expire'       => $expiration_date,
+                ];
+            }
+        }
+
+        return $user_services;
     }
 
 
@@ -191,7 +357,16 @@ class WPUserServicesManager {
         ];
     }
 
-    
+    /**
+     * Get Woocommerce Products
+     */
+    public function get_products() {
+        return get_posts([
+            'post_type'      => 'product',  
+            'posts_per_page' => -1
+        ]); 
+    }
+
     /**
      * Switch theme for $blog_id
      */
