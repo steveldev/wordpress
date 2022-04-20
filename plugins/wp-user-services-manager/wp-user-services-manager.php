@@ -166,10 +166,6 @@ class WPUserServicesManager {
         echo '<table>';
         foreach($user_services['current'] as $user_service) {
 
-            echo '<pre>';
-            print_r($user_service);
-            echo '</pre>';
-
             switch($user_service['status']) {
                 case 'processing':
                     $bouton_action = '<strong>En cours de validation</strong>';
