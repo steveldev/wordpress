@@ -29,7 +29,7 @@ class WPExtensionsManager {
         $this->plugin_name = basename( $this->plugin_path );
         $this->plugin_slug = strtolower( str_replace(' ', '-', $this->plugin_name));
 
-        $this->plugin_notices[] = ['class' => 'notice notice-success', 'message' => 'Chargement du plugin OK ! '];
+        //$this->plugin_notices[] = ['class' => 'notice notice-success', 'message' => 'Chargement du plugin OK ! '];
 
         add_action('init', [$this, 'test_required_files'], 1);
         add_action('init', [$this, 'test_capabilities'], 2);
@@ -100,14 +100,20 @@ class WPExtensionsManager {
     
     public function plugin_page_settings() {
 
-        // settings
+        /**
+         * Register settings
+         * @see https://developer.wordpress.org/reference/functions/register_setting/
+         */
         register_setting( 
             'extensions_settings',          // Settings group.
             'extensions_settings',          // Setting name
             [$this, 'sanitize_text_field']  // Sanitize callback.
         );
 
-        // settings section
+        /**
+         * Add settings section
+         * @see https://developer.wordpress.org/reference/functions/add_settings_section/
+         */                
         add_settings_section( 
             'section_extensions',                       // Section ID
             'Gestion des extensions',         // Title
@@ -120,8 +126,9 @@ class WPExtensionsManager {
         );
 
         /**
-         * settings fields
-         * loop on extensions and generate each field
+         * Add settings field
+         * default fields from ./data/$class/example.php
+         * @see https://developer.wordpress.org/reference/functions/add_settings_field/
          */ 
         $option = (array) get_option( $this->plugin_slug );          
 
