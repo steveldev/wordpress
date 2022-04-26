@@ -20,6 +20,7 @@ class WPMarketAPI {
     const DISTANCE_DEFAULT  = 10;    // km
     const DISTANCE_MAX      = 200;       // km
 
+
     public function __construct() {
         // API endpoints
         add_action('rest_api_init', [$this, 'add_api_endpoint']);
@@ -94,15 +95,18 @@ class WPMarketAPI {
 
         // get data
         if(!empty( $zipcode ) ) :
+
             // get gps lat & lng for this zipcode
 
-            // get markets
+            $latitude  = '';
+            $longitude = '';
+            //$markets = $this->get_results($latitude, $longitude, $distance);
 
         else : 
 
+            $markets = $this->get_results($latitude, $longitude, $distance);
         endif;
 
-        $markets = $this->get_results($latitude, $longitude, $distance);
        
         return $markets;
     }
