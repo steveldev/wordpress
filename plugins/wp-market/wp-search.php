@@ -9,101 +9,80 @@
 defined('ABSPATH') or die();
 
 /**
+ * - Rplace default page query
  * - Get user location
  * - Get search results (market in location area : 10Km )
  * - Paginate results (infinite scroll)
  * - Search template page
+ *      - user can filter by : 
+ *          - zipcode (display if location is empty / autocomplete by user location)
+ *          - distance (force max distance (km)
+ *          ? categories  
+ *          ? other 
+ * 
  * 
  * https://codex.wordpress.org/Creating_a_Search_Page
- * 
+ * https://wabeo.fr/requete-geolocalisee-wordpress/
  */
 
-
+new WPCustomSearch();
 class WPCustomSearch {
 
-    const DISTANCE    = 10;// Km;
-    const NUMBERPOSTS = 50; // results per page
-
     public function __construct() {
-        if( !empty($_POST['s']) && current_user_can('administrator') ) {            
-            add_action('init', [$this, 'render']);
+
+        if(empty( $_GET['s'])) return;
+
+        add_action('init', [$this, 'render']);
+
+    }
+
+
+    public function get_markets() {
+
+        $params = '';
+
+        if(!empty($_GET['lat'] && !empty($_GET['lng']))) {
+            $params .= '?lat='.$_GET['lat'];
+            $params .= '&lng='.$_GET['lng'];
         }
-    }
-    
-    public function get_results() { 
 
-        // settings 
-        $location_origin = ['43.600000','1.433333']; // Toulouse
+        if(!empty($_GET['dist'])) {
+            $params .= '&dist='.$_GET['dist'];
+        }
 
-        // convert Km to m (GPS unit : m )
-        $distance = self::DISTANCE * 1000 / 2; // circle radius
+        $params = !empty($params) ? $params : '?lat=47.1264192&lng=1.4379064&dist=10';
 
-        // Set location area
-        $location = [    
-            'long_origin' => $location_origin[1], 
-            'lat_origin'  => $location_origin[0],   
-            'lat_min'     => $location_origin[0] - $distance, 
-            'long_min'    => $location_origin[1] - $distance, 
-            'long_max'    => $location_origin[1] + $distance, 
-            'lat_max'     => $location_origin[0] + $distance, 
-        ];
+        $api_url  = 'http://localhost/lesconnectes/wp-json/api/markets' . $params;
+        $api_data = file_get_contents($api_url);
 
-
-        return new WP_Query([
-            'post_type'     => 'market',
-            'numberposts'   => 50, 
-            'meta_query'    => [
-                [
-                'key'       => 'market_lat',
-                'value'     => [$location['lat_min'], $location['lat_max']],            
-                'type'      => 'numeric',
-                'compare'   => 'BETWEEN'
-                ],
-                [
-                'key'       => 'market_long',
-                'value'     => [$location['long_min'], $location['long_max']],            
-                'type'      => 'numeric',
-                'compare'   => 'BETWEEN'
-                ],
-
-            ]
-        ]);
+        return json_decode($api_data);
 
     }
 
-    public function get_distance($start, $end) {
-
-    }
 
     public function render() {
         
-        $results = $this->get_results();
+        // search form
+        //get_search_form();
 
-        // debug
-        echo '<pre>';
-        var_dump($results);
-        echo '</pre>';
+        $posts = $this->get_markets();
+        
 
-        if ( have_posts() ) :
-            while ( have_posts() ) : the_post(); 
-                
-                // get post meta
-                $post_meta = get_post_meta( $post->ID );
-                
-                // debug
-                echo '<pre>';
-                var_dump($post_meta);
-                echo '</pre>';
-                
-            endwhile;
-        else : 
-            return 'Aucun market trouvé pour cette zone';
-        endif; 
+        if(empty($posts)) return;
+
+        echo '<ul>';
+        foreach($posts as $post) :
+
+            echo '<li>';
+            printf('<a href="%s">%s<a> (%d Km)', get_the_permalink($post->ID), $post->post_title, number_format( (float) $post->distance, 2, '.', ' ') );
+            echo '</li>';
+
+        endforeach;
+        echo '</ul>';
 
 
-
-        die();
     }
+
 
 
 
