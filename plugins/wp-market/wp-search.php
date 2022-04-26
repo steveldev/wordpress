@@ -33,6 +33,9 @@ class WPCustomSearch {
         if(empty( $_GET['s'])) return;
 
         add_action('init', [$this, 'render']);
+        
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
+        add_shortcode( 'search_market', [$this, 'add_shortcode'] );
 
     }
 
@@ -62,9 +65,13 @@ class WPCustomSearch {
 
     public function render() {
         
+        echo '<div style="margin:5rem 2.5rem;">';
         // search form
         //get_search_form();
+       echo do_shortcode('[search_market]');
 
+/*
+       
         $posts = $this->get_markets();
         
 
@@ -74,17 +81,39 @@ class WPCustomSearch {
         foreach($posts as $post) :
 
             echo '<li>';
-            printf('<a href="%s">%s<a> (%d Km)', get_the_permalink($post->ID), $post->post_title, number_format( (float) $post->distance, 2, '.', ' ') );
+            printf('<a href="%s">%s<a> (Distance : %d Km, xx shops)', 
+                get_the_permalink($post->ID), 
+                $post->post_title, 
+                number_format( (float) $post->distance, 2, '.', ' ') 
+            );
             echo '</li>';
 
         endforeach;
         echo '</ul>';
-
+*/
+        echo '</div>';
 
     }
 
-
-
+    public function enqueue_scripts() {
+        wp_enqueue_script( 'script-name', plugin_dir_url( __FILE__ ) . '/src/components/geoloc.js', array(), '1.0.0', true );
+    }
+  
+  
+  
+  
+    public function add_shortcode( $atts = array(), $content = null , $tag = 'geoloc' ){
+      ob_start();
+      ?>
+          <button id = "find-me"><span class="dashicons dashicons-location"></span> Rechercher les marchés alentours</button><br/>
+          <p id = "status"></p>
+          <a id = "map-link" target="_blank"></a>
+          <div id = "markets" target="_blank"></div>
+  
+      <?php 
+      return ob_get_clean();
+    }
+    
 
 
 } 
