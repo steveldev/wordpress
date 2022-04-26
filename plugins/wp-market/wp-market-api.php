@@ -65,12 +65,15 @@ class WPMarketAPI {
 
     public function get_markets(WP_REST_Request $request) {
 
+        $markets = [];
+        
         // filters
        
         $zipcode   = $request->get_param('zipcode');
         $latitude  = $request->get_param('lat');
         $longitude = $request->get_param('lng');
         $distance  = $request->get_param('dist');
+
 
 
         if(!empty($zipcode)) {
