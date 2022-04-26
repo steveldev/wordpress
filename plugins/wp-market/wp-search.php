@@ -30,7 +30,8 @@ defined('ABSPATH') or die();
  *          - distance (force max distance (km)
  *          ? categories  
  *          ? other 
- * 
+ * - Map
+ *  - Affichage popup sur markers + liens marché 
  * 
  * https://codex.wordpress.org/Creating_a_Search_Page
  * https://wabeo.fr/requete-geolocalisee-wordpress/
@@ -60,25 +61,62 @@ class WPCustomSearch {
     public function add_shortcode( $atts = array(), $content = null , $tag = 'geoloc' ){
       ob_start();
       ?>
-          <button id = "find-me"><span class="dashicons dashicons-location"></span> Rechercher les marchés alentours</button><br/>
-          <p id = "status"></p>
-          <a id = "map-link" target="_blank"></a>
-          <div id = "markets"></div>
-          <div id = "map" style="height:450px;"></div>
-          <div id = "markets-map" style="height:250px;"></div>
-  
-          <!-- Openstreetmap -->
-          <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-   crossorigin=""/>
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
- <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
-   integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
-   crossorigin=""></script>
+        <style type="text/css">
+            .hidden {display:none;}
+            input#zipcode {border:1px solid silver!important;}
+            .border-top {border-top:1px solid silver;}
+
+            ul.markets, ul.markets li  {list-style: none!important;margin:0!important;padding:0!important;}
+            ul.markets li {
+                padding:.5rem .5rem!important;
+                border:1px solid silver;
+                margin:1rem 0!important;
+            }
+            ul.markets li a {text-decoration:none!important;color:#000!important; }
+            .markets-count { border-top:1px solid silver;margin-top:2rem;padding-top:1rem;font-size:1.3rem;font-weight: bold;}
+        </style>
+
+        <div style="display:flex;">
+            <div class="col">
+                <button id = "find-me"><span class="dashicons dashicons-location"></span> Rechercher les marchés alentours</button><br/>
+                
+                <p id = "status"></p>
+
+                <div class="form-location hidden" style="margin:1.5rem 0;">
+                    <form action="">
+                        <label for="zipcode"></label>
+                        <input id="zipcode" type="text" maxlength="5" name="zipcode" placeholder="Code Postal">
+                        <button type="submit">Valider</button>
+                    </form>
+                </div>
+                
+
+                <div id = "search-filters">
+                    <p class="search-filters-text" style="margin-bottom:0;"></p>
+                    <a class="search-filters-edit-link hidden" href="">Modifier ma recherche</a>
+                </div>
+
+
+                <div class="markets-container">
+                    <div class="markets-count"></div>
+                    <ul class="markets">
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col" style="width:50%;margin-left:2rem;">
+                <div id = "map" style="height:450px;width:100%;"></div>
+                <div id = "googlemap" style="height:250px;"></div>
+            </div>
+     </div>
+        <!-- Openstreetmap : https://leafletjs.com/examples/quick-start/ -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
+        <!-- Make sure you put this AFTER Leaflet's CSS -->
+        <script  script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
 
         <!-- google maps
-          <script defer src="https://maps.googleapis.com/maps/api/js?key=__API_KEY__&callback=initMap&v=weekly"></script>
-        -->
+        <script defer src="https://maps.googleapis.com/maps/api/js?key=__API_KEY__&callback=initMap&v=weekly"></script>
+         -->
       <?php 
       return ob_get_clean();
     }

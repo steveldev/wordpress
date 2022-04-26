@@ -4,22 +4,22 @@
 function geoFindMe() {
 
     const status = document.querySelector('#status');
-    const mapLink = document.querySelector('#map-link');
-    const markets = document.querySelector('#markets');
+    const filters = document.querySelector('.search-filters-text');
+    const filtersLink = document.querySelector('.search-filters-edit-link');
+    const markets = document.querySelector('ul.markets');
+    const formzip = document.querySelector('.form-location')
   
-    mapLink.href = '';
-    mapLink.textContent = '';
+    filters.innerHTML = '';
     markets.innerHTML = '';
   
     function success(position) {
       const latitude  = position.coords.latitude;
       const longitude = position.coords.longitude;
   
-      status.textContent = '';
-      mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
-      mapLink.textContent = `Votre position :  ${latitude} °, ${longitude} °`;
+      status.textContent = `Recherche des marchés à proximité`;
+      
+      filters.innerHTML = `Votre position :  ${latitude} °, ${longitude} °`;
 
-      markets.textContent = `Recherche des marchés à proximité`;
       
       // get market by location
       let api_url = window.location.origin + '/lesconnectes/wp-json/api/markets';
@@ -29,7 +29,7 @@ function geoFindMe() {
       let distance = params.get("dist"); 
       
       
-      markets.textContent = `Distance : `+distance+' Km.';
+      filters.innerHTML += `<br>Distance : `+distance+' Km.';
       
 
       // fetch API
@@ -45,27 +45,28 @@ function geoFindMe() {
       
         const items = data;
         console.log(items);
-        markets.innerHTML += '<ul>';
         items.forEach( item => {
-          markets.innerHTML += '<li><a href="">'+item.post_title+' ('+Number(item.distance).toFixed(2)+' Km)</a></li>';
+          markets.innerHTML += '<li><a href="">'+item.post_title+'</a><br>Distance : '+Number(item.distance).toFixed(2)+' Km</li>';
         })
-        markets.innerHTML += '<ul>';
 
         // load Google Maps
       //  window.initMap = initMap(latitude, longitude, items);
 
         // load openstreetmaps
         window.initOpenStreetMap = initOpenStreetMap(latitude, longitude, items, distance);
+
+        status.textContent = '';
+        filtersLink.classList.remove('hidden');
+        document.querySelector('.markets-count').textContent = items.length+' résultats';
       })
-
-    
-
 
 
     }
   
     function error() {
-      status.textContent = 'Echec de la localisation.';
+      //status.textContent = 'Echec de la localisation.';
+      status.textContent = 'Veuillez saisir votre code postal.';
+      formzip.classList.remove('hidden');
     }
   
     if(!navigator.geolocation) {
@@ -84,14 +85,12 @@ function geoFindMe() {
       
       // markers
         // user marker
-        var marker = L.marker([lat, lng], {fillColor: 'red'}).addTo(map);
+        var marker = L.marker([lat, lng]).addTo(map);
 
         // items markers
         items.forEach( item => {
-          var marker = L.marker([item.locLat, item.locLong], {color: 'green'}).addTo(map);
+          var marker = L.marker([item.locLat, item.locLong]).addTo(map);
         });
-
-
 
 
       L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -100,7 +99,7 @@ function geoFindMe() {
           id: 'mapbox/streets-v11',
           tileSize: 512,
           zoomOffset:-1,
-          accessToken: 'YOUR TOKEN HERE'
+          accessToken: '__API_KEY__'
       }).addTo(map);
 
      
@@ -112,7 +111,7 @@ function geoFindMe() {
   function initMap(lat, lng, items) {
     
     const myLatLng = { lat: lat, lng: lng };
-    const map = new google.maps.Map(document.getElementById("markets-map"), {
+    const map = new google.maps.Map(document.getElementById("googlemap"), {
       zoom: 4,
       center: myLatLng,
     });
