@@ -8,6 +8,17 @@
 
 defined('ABSPATH') or die();
 
+
+/** 
+ * HOW TO USE
+ * - Add shortcode [search_market] in your page to display button (My location)
+ * 
+ */
+
+
+
+
+
 /**
  * - Rplace default page query
  * - Get user location
@@ -30,12 +41,14 @@ class WPCustomSearch {
 
     public function __construct() {
 
-        if(empty( $_GET['s'])) return;
-
-        add_action('init', [$this, 'render']);
-        
+        // Button : search around me
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         add_shortcode( 'search_market', [$this, 'add_shortcode'] );
+
+        // search page / results
+        if(!empty( $_GET['s'])) {            
+           // add_action('init', [$this, 'render']);
+        }       
 
     }
 
@@ -69,8 +82,6 @@ class WPCustomSearch {
         // search form
         //get_search_form();
        echo do_shortcode('[search_market]');
-
-/*
        
         $posts = $this->get_markets();
         
@@ -90,7 +101,7 @@ class WPCustomSearch {
 
         endforeach;
         echo '</ul>';
-*/
+
         echo '</div>';
 
     }

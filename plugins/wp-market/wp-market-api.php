@@ -66,7 +66,7 @@ class WPMarketAPI {
     public function get_markets(WP_REST_Request $request) {
 
         $markets = [];
-        
+
         // filters
        
         $zipcode   = $request->get_param('zipcode');
@@ -81,14 +81,14 @@ class WPMarketAPI {
                 $zipcode = '';
             }
         }
-
+/*
         if(!empty($latitude) && !empty($longitude)) {
             if( !is_float($latitude) || !is_float($longitude) ) {
                 $latitude  = '47.1264192';
                 $longitude = '1.4379064';
             }
         }
-
+*/
         if(!empty($distance) ) {
             if( !is_numeric($distance) || $distance > self::DISTANCE_MAX ) {
                 $distance  = self::DISTANCE_DEFAULT;
