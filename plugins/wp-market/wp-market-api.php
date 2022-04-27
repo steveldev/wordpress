@@ -126,6 +126,7 @@ class WPMarketAPI {
             SELECT DISTINCT
                 p.ID,
                 p.post_title,
+                p.guid,
                 map_lat.meta_value as locLat,
                 map_lng.meta_value as locLong,
                 ( %d * acos(

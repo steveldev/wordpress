@@ -1,143 +1,188 @@
+// Global settings
+const MapBoxAPIkey    = '';
+const GoogleMapAPIkey = '';
+const distance = 50;
+
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API
+function geoLocation() {
 
-function geoFindMe() {
+  const status = document.querySelector('#status');
+  const filters = document.querySelector('.search-filters-text');
+  const filtersLink = document.querySelector('.search-filters-edit-link');
+  const markets = document.querySelector('ul.markets');
+  const formzip = document.querySelector('.form-location')
 
-    const status = document.querySelector('#status');
-    const filters = document.querySelector('.search-filters-text');
-    const filtersLink = document.querySelector('.search-filters-edit-link');
-    const markets = document.querySelector('ul.markets');
-    const formzip = document.querySelector('.form-location')
-  
-    filters.innerHTML = '';
-    markets.innerHTML = '';
-  
-    function success(position) {
-      const latitude  = position.coords.latitude;
-      const longitude = position.coords.longitude;
-  
-      status.textContent = `Recherche des marchés à proximité`;
-      
-      filters.innerHTML = `Votre position :  ${latitude} °, ${longitude} °`;
+  let api_url;
 
-      
-      // get market by location
-      let api_url = window.location.origin + '/lesconnectes/wp-json/api/markets';
-      api_url +=  '?lat='+latitude+'&lng='+longitude+'&dist=30';
-
-      let params = new URLSearchParams(api_url);
-      let distance = params.get("dist"); 
-      
-      
-      filters.innerHTML += `<br>Distance : `+distance+' Km.';
-      
-
-      // fetch API
-      fetch( api_url, {
-            method: 'GET',
-            //mode: 'no-cors',
-            cache: 'default',
-            // credentials: 'omit', // include, *same-origin, omit
-            //   body: JSON.stringify( {location: 76} )
-      })
-      .then((res)  => res.json())
-      .then((data) => {
-      
-        const items = data;
-        console.log(items);
-        items.forEach( item => {
-          markets.innerHTML += '<li><a href="">'+item.post_title+'</a><br>Distance : '+Number(item.distance).toFixed(2)+' Km</li>';
-        })
-
-        // load Google Maps
-      //  window.initMap = initMap(latitude, longitude, items);
-
-        // load openstreetmaps
-        window.initOpenStreetMap = initOpenStreetMap(latitude, longitude, items, distance);
-
-        status.textContent = '';
-        filtersLink.classList.remove('hidden');
-        document.querySelector('.markets-count').textContent = items.length+' résultats';
-      })
+  filters.innerHTML = '';
+  markets.innerHTML = '';
 
 
-    }
-  
-    function error() {
-      //status.textContent = 'Echec de la localisation.';
-      status.textContent = 'Veuillez saisir votre code postal.';
-      formzip.classList.remove('hidden');
-    }
-  
-    if(!navigator.geolocation) {
-      status.textContent = 'Geolocalisation non supportée sur votre appareil.';
-    } else {
-      status.textContent = 'Localisation en cours ...';
-      navigator.geolocation.getCurrentPosition(success, error);
+  if(!navigator.geolocation) {
+    status.textContent = 'Geolocalisation non supportée sur votre navigateur.';
+    formzip.classList.remove('hidden');    
+  } 
+  else {
+    // Get user location by browser
+    status.textContent = 'Localisation en cours ...';    
+    navigator.geolocation.getCurrentPosition(success, error);    
+  }
 
-    }
-  
-    // openstreetmaps
-    // https://leafletjs.com/examples/quick-start/
-    function initOpenStreetMap(lat, lng, items, distance) {
-      
-      var map = L.map('map').setView([lat, lng], 9);
-      
-      // markers
-        // user marker
-        var marker = L.marker([lat, lng]).addTo(map);
+  // location by browser ok
+  function success(position) {   
+    getMarkets(position.coords.latitude, position.coords.longitude); 
+  }
 
-        // items markers
-        items.forEach( item => {
-          var marker = L.marker([item.locLat, item.locLong]).addTo(map);
-        });
+  // location by browser not ok
+  function error() {
+    //status.textContent = 'Echec de la localisation.';
+    status.textContent = 'Veuillez saisir votre code postal.';
+    formzip.classList.remove('hidden');
+  }
 
 
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 18,
-          id: 'mapbox/streets-v11',
-          tileSize: 512,
-          zoomOffset:-1,
-          accessToken: '__API_KEY__'
-      }).addTo(map);
+}
 
-     
+function getLocationByZipcode() {
 
-
-    }
-
-    // Google maps
-  function initMap(lat, lng, items) {
+  const zipcode = document.querySelector('input#zipcode').value;
+  if(zipcode) {
+    // get markets by zipcode
+    api_url = location.protocol + '//nominatim.openstreetmap.org/search?format=json&q='+zipcode+',France';
     
-    const myLatLng = { lat: lat, lng: lng };
-    const map = new google.maps.Map(document.getElementById("googlemap"), {
-      zoom: 4,
-      center: myLatLng,
-    });
-  
-    items.forEach( item => {
-      new google.maps.Marker({
-        position: myLatLng,
-        map,
-        title: "Hello World!",
-        color: 'blue'
-      });
+    fetch( api_url , {
+      method: 'GET',
+      cache: 'default',
+    })
+    .then((res)  => res.json())
+    .then((data) => {   
+      const items = data; 
+      getMarkets( items[0].lat, items[0].lon, distance);     
+    }) 
+    
+  } 
+}
 
+// Get Markets
+function getMarkets( latitute, longitude, distance ) {
+  
+  const status = document.querySelector('#status');
+  const filters = document.querySelector('.search-filters-text');
+  const filtersLink = document.querySelector('.search-filters-edit-link');
+  const markets = document.querySelector('ul.markets');
+
+  status.textContent = 'Recherche des marchés à proximité';
+
+  filters.innerHTML = 'Votre position :  '+ latitute +', '+longitude;
+  filters.innerHTML += '<br>Distance : '+distance+' Km.'; 
+  
+  // Api url
+  let api_url = window.location.origin + '/lesconnectes/wp-json/api/markets';
+  api_url +=  '?lat='+ latitute +'&lng='+longitude+'&dist='+distance;
+
+  let params = new URLSearchParams(api_url);
+  distance = params.get("dist");     
+
+
+  // fetch API
+  fetch( api_url , {
+    method: 'GET',
+    cache: 'default',
+  })
+  .then((res)  => res.json())
+  .then((data) => {
+    
+    status.textContent = '';
+    filtersLink.classList.remove('hidden');
+
+    const items = data;
+    console.log(items);
+
+
+    items.forEach( item => {
+      markets.innerHTML += '<li><a href="">'+item.post_title+'</a><br>Distance : '+Number(item.distance).toFixed(2)+' Km</li>';
     })
 
-      new google.maps.Marker({
-        position: myLatLng,
-        map,
-        title: "Hello World!",
-      });
-  }
-
-  }
-  
-  document.querySelector('#find-me').addEventListener('click', geoFindMe);
-  
+    document.querySelector('.markets-count').textContent = items.length+' résultats';
 
 
+    // Load map
+      if(GoogleMapAPIkey) {
+        window.initMap = initMap(latitude, longitude, items);
+      } 
+      else if (MapBoxAPIkey){
+        window.initOpenStreetMap = initOpenStreetMap( latitute, longitude, items, distance);
+      } else {
+        console.log('API not found. Needed to load matching map');
+      }
+
+  })
   
-  //window.initMap = initMap;
+}
+
+// openstreetmaps : https://leafletjs.com/examples/quick-start/
+function initOpenStreetMap(lat, lng, items, distance) {
+  
+  // init map
+  var map = L.map('map').setView([lat, lng], 9);
+  
+  // markers
+
+    // items markers
+    items.forEach( item => {
+      var marker = L.marker([item.locLat, item.locLong]).addTo(map);
+      var markerlink = '<br><a href="">Afficher plus d\'informations</a>';
+      marker.bindPopup("<b>"+item.post_title+"</b><br>Distance : "+Number(item.distance).toFixed(2)+" Km" + markerlink).openPopup();
+    });
+
+    // user marker
+    var marker = L.marker([lat, lng]).addTo(map);
+    marker.bindPopup("<b>Vous êtes ici</b>").openPopup();
+
+  // Layer
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 18,
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset:-1,
+      accessToken: MapBoxAPIkey
+  }).addTo(map);
+
+}
+
+// Google maps
+function initMap(lat, lng, items) {
+  // init map
+  const myLatLng = { lat: lat, lng: lng };
+  const map = new google.maps.Map(document.getElementById("googlemap"), {
+    zoom: 4,
+    center: myLatLng,
+  });
+
+  // markers
+  items.forEach( item => {
+    new google.maps.Marker({
+      position: myLatLng,
+      map,
+      title: "Hello World!",
+      color: 'blue'
+    });
+
+  })
+
+  new google.maps.Marker({
+    position: myLatLng,
+    map,
+    title: "Hello World!",
+  });
+
+}
+
+// button : find near me
+document.querySelector('#find-me').addEventListener('click', geoLocation);
+
+// button : form zipcode submit
+document.querySelector('#form-zipcode').addEventListener('submit', getLocationByZipcode);
+
