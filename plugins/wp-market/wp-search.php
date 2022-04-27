@@ -40,6 +40,9 @@ defined('ABSPATH') or die();
 new WPCustomSearch();
 class WPCustomSearch {
 
+    const MAP_TYPE = 'openstreetmap'; // openstreetmap | googlemap 
+    const GOOGLEMAP_APIKEY = '';
+
     public function __construct() {
 
         // Button : search around me
@@ -54,7 +57,16 @@ class WPCustomSearch {
     }
 
     public function enqueue_scripts() {
-        wp_enqueue_script( 'script-name', plugin_dir_url( __FILE__ ) . '/src/components/geoloc.js', array(), '1.0.0', true );
+
+        wp_enqueue_script( 'script-name', plugin_dir_url( __FILE__ ) . '/src/components/geoloc.js', [], '1.0.0', true );
+
+        if(self::MAP_TYPE == 'googlemap') {
+            wp_enqueue_script( 'googlemap-js', 'https://maps.googleapis.com/maps/api/js?key='.self::GOOGLEMAP_APIKEY.'&callback=initMap&v=weekly', [], false, true );
+        } else {
+            wp_enqueue_style('openstreetmap-css', 'https://unpkg.com/leaflet@1.8.0/dist/leaflet.css', [], false);
+            wp_enqueue_script( 'openstreetmap-js', 'https://unpkg.com/leaflet@1.8.0/dist/leaflet.js', [], false, true );
+        }
+
     }
   
     
@@ -72,21 +84,30 @@ class WPCustomSearch {
                 border:1px solid silver;
                 margin:1rem 0!important;
             }
-            ul.markets li a {text-decoration:none!important;color:#000!important; }
+            ul.markets li:hover {border:1px solid silver;}
+            ul.markets li a {text-decoration:none!important;color:#000!important;text-transform: capitalize; }
             .markets-count { border-top:1px solid silver;margin-top:2rem;padding-top:1rem;font-size:1.3rem;font-weight: bold;}
         </style>
 
         <div style="display:flex;">
-            <div class="col">
-                <button id = "find-me"><span class="dashicons dashicons-location"></span> Rechercher les marchés alentours</button><br/>
+            <div class="col" style="min-width:35%;">
+                <button id = "find-me" style="width:100%;"><span class="dashicons dashicons-location"></span> Rechercher les marchés alentours</button><br/>
                 
                 <p id = "status"></p>
 
                 <div class="form-location hidden" style="margin:1.5rem 0;">
-                    <form action="">
+                    <form action="" method="post" id="form-zipcode">
                         <label for="zipcode"></label>
-                        <input id="zipcode" type="text" maxlength="5" name="zipcode" placeholder="Code Postal">
-                        <button type="submit">Valider</button>
+                        <input id="zipcode" type="text" maxlength="5" name="zipcode" placeholder="Code Postal" value="">
+                        <select id="distance" name="distance">
+                            <option>Distance</option>
+                            <option value="10">10 Km</option>
+                            <option value="20">20 Km</option>
+                            <option value="30">30 Km</option>
+                            <option value="40">40 Km</option>
+                            <option value="50" selected>50 Km</option>
+                        </select>
+                        <button type="submit"><span class="dashicons dashicons-search"></span> Valider</button>
                     </form>
                 </div>
                 
@@ -99,24 +120,15 @@ class WPCustomSearch {
 
                 <div class="markets-container">
                     <div class="markets-count"></div>
-                    <ul class="markets">
-
-                    </ul>
+                    <ul class="markets"></ul>
                 </div>
             </div>
-            <div class="col" style="width:50%;margin-left:2rem;">
+            <div class="col" style="width:100%;margin-left:2rem;">
                 <div id = "map" style="height:450px;width:100%;"></div>
                 <div id = "googlemap" style="height:250px;"></div>
             </div>
      </div>
-        <!-- Openstreetmap : https://leafletjs.com/examples/quick-start/ -->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
-        <!-- Make sure you put this AFTER Leaflet's CSS -->
-        <script  script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
 
-        <!-- google maps
-        <script defer src="https://maps.googleapis.com/maps/api/js?key=__API_KEY__&callback=initMap&v=weekly"></script>
-         -->
       <?php 
       return ob_get_clean();
     }

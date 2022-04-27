@@ -18,10 +18,11 @@ new WPMarketAPI();
 class WPMarketAPI {
 
     const DISTANCE_DEFAULT  = 10;    // km
-    const DISTANCE_MAX      = 200;       // km
+    const DISTANCE_MAX      = 100;       // km
 
 
     public function __construct() {
+        
         // API endpoints
         add_action('rest_api_init', [$this, 'add_api_endpoint']);
     }
@@ -54,12 +55,11 @@ class WPMarketAPI {
         $data = $this->get_markets($request);
         
         // set code response
-        $code = empty($data) ? 404 : 200;
+        $code = empty($data) ? 204 : 200;
 
         // response
-        $response = new WP_REST_Response($data, $code);
+        $response = new WP_REST_Response( (array) $data, $code);
         return $response;
-
     }
     
 
@@ -67,20 +67,12 @@ class WPMarketAPI {
 
         $markets = [];
 
-        // filters
-       
+        // filters       
         $zipcode   = $request->get_param('zipcode');
         $latitude  = $request->get_param('lat');
         $longitude = $request->get_param('lng');
         $distance  = $request->get_param('dist');
 
-
-
-        if(!empty($zipcode)) {
-            if( !is_numeric($zipcode) || strlen($zipcode) < 3 ) {
-                $zipcode = '';
-            }
-        }
 /*
         if(!empty($latitude) && !empty($longitude)) {
             if( !is_float($latitude) || !is_float($longitude) ) {
@@ -88,6 +80,7 @@ class WPMarketAPI {
                 $longitude = '1.4379064';
             }
         }
+
 */
         if(!empty($distance) ) {
             if( !is_numeric($distance) || $distance > self::DISTANCE_MAX ) {
@@ -95,21 +88,8 @@ class WPMarketAPI {
             }
         }
 
-
         // get data
-        if(!empty( $zipcode ) ) :
-
-            // get gps lat & lng for this zipcode
-
-            $latitude  = '';
-            $longitude = '';
-            //$markets = $this->get_results($latitude, $longitude, $distance);
-
-        else : 
-
-            $markets = $this->get_results($latitude, $longitude, $distance);
-        endif;
-
+        $markets = $this->get_results($latitude, $longitude, $distance);
        
         return $markets;
     }

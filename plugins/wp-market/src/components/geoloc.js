@@ -1,8 +1,15 @@
+/*
+ TODO : 
+  - Modification de la recherche : change filters location, distance
+  - recadrage de la map lors d'une nouvelle recherche
+*/
+
+
 // Global settings
 const MapBoxAPIkey    = '';
 const GoogleMapAPIkey = '';
-const distance = 50;
-
+const distanceDefault = 10;
+let map = '';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API
 function geoLocation() {
@@ -44,22 +51,25 @@ function geoLocation() {
 
 }
 
-function getLocationByZipcode() {
-
+function getLocationByZipcode(e) {
+  e.preventDefault();
+  
   const zipcode = document.querySelector('input#zipcode').value;
+  const distance = document.querySelector('select#distance').value
+ 
+
   if(zipcode) {
     // get markets by zipcode
     api_url = location.protocol + '//nominatim.openstreetmap.org/search?format=json&q='+zipcode+',France';
-    
+    console.log(api_url);
     fetch( api_url , {
       method: 'GET',
       cache: 'default',
     })
     .then((res)  => res.json())
-    .then((data) => {   
-      const items = data; 
-      getMarkets( items[0].lat, items[0].lon, distance);     
-    }) 
+    .then((data) => {        
+      getMarkets( data[0].lat, data[0].lon, distance);     
+    })
     
   } 
 }
@@ -72,10 +82,7 @@ function getMarkets( latitute, longitude, distance ) {
   const filtersLink = document.querySelector('.search-filters-edit-link');
   const markets = document.querySelector('ul.markets');
 
-  status.textContent = 'Recherche des marchés à proximité';
-
-  filters.innerHTML = 'Votre position :  '+ latitute +', '+longitude;
-  filters.innerHTML += '<br>Distance : '+distance+' Km.'; 
+  if(!distance) { distance = distanceDefault; }
   
   // Api url
   let api_url = window.location.origin + '/lesconnectes/wp-json/api/markets';
@@ -83,6 +90,13 @@ function getMarkets( latitute, longitude, distance ) {
 
   let params = new URLSearchParams(api_url);
   distance = params.get("dist");     
+
+  // update contents
+  status.textContent = 'Recherche des marchés à proximité';
+  markets.innerHTML = '';
+
+  filters.innerHTML = 'Votre position :  '+ latitute +', '+longitude;
+  filters.innerHTML += '<br>Distance : '+distance+' Km.'; 
 
 
   // fetch API
@@ -93,29 +107,34 @@ function getMarkets( latitute, longitude, distance ) {
   .then((res)  => res.json())
   .then((data) => {
     
-    status.textContent = '';
-    filtersLink.classList.remove('hidden');
+    if(!data) {
+      markets.innerHTML = 'Aucun résultat pour cette recherche.';
+    }
+    else {
 
-    const items = data;
-    console.log(items);
+      status.textContent = '';
+      filtersLink.classList.remove('hidden');
+
+      // update contents
+      data.forEach( item => {
+        markets.innerHTML += '<li><a href="">'+item.post_title+'</a><br>Distance : '+Number(item.distance).toFixed(2)+' Km</li>';
+      })
+
+      document.querySelector('.markets-count').textContent = data.length+' résultats';
 
 
-    items.forEach( item => {
-      markets.innerHTML += '<li><a href="">'+item.post_title+'</a><br>Distance : '+Number(item.distance).toFixed(2)+' Km</li>';
-    })
+      // Load / refresh map
+        if(GoogleMapAPIkey) {
+          initMap( latitute, longitude, data);
+        } 
+        else if (MapBoxAPIkey){
+          initOpenStreetMap( latitute, longitude, data, distance);
+        } else {
+          console.log('API not found. Needed to load matching map');
+        }
+    }
 
-    document.querySelector('.markets-count').textContent = items.length+' résultats';
 
-
-    // Load map
-      if(GoogleMapAPIkey) {
-        window.initMap = initMap(latitude, longitude, items);
-      } 
-      else if (MapBoxAPIkey){
-        window.initOpenStreetMap = initOpenStreetMap( latitute, longitude, items, distance);
-      } else {
-        console.log('API not found. Needed to load matching map');
-      }
 
   })
   
@@ -124,8 +143,22 @@ function getMarkets( latitute, longitude, distance ) {
 // openstreetmaps : https://leafletjs.com/examples/quick-start/
 function initOpenStreetMap(lat, lng, items, distance) {
   
-  // init map
-  var map = L.map('map').setView([lat, lng], 9);
+    // init
+    if(!map) {      
+      map = L.map('map').setView([lat, lng], 15);
+    } else {
+      // clear current map
+      map.eachLayer((layer) => {
+        layer.remove();
+      });
+    }
+
+    // view position
+    map.flyTo([lat, lng], 10, {
+        animate: true,
+        duration: 2 // seconds
+    });
+
   
   // markers
 
@@ -166,7 +199,7 @@ function initMap(lat, lng, items) {
     new google.maps.Marker({
       position: myLatLng,
       map,
-      title: "Hello World!",
+      title: item.post_title,
       color: 'blue'
     });
 
@@ -175,7 +208,7 @@ function initMap(lat, lng, items) {
   new google.maps.Marker({
     position: myLatLng,
     map,
-    title: "Hello World!",
+    title: "Vous êtes ici.",
   });
 
 }
@@ -184,5 +217,5 @@ function initMap(lat, lng, items) {
 document.querySelector('#find-me').addEventListener('click', geoLocation);
 
 // button : form zipcode submit
-document.querySelector('#form-zipcode').addEventListener('submit', getLocationByZipcode);
+document.querySelector('#form-zipcode').addEventListener('submit', getLocationByZipcode, false);
 
