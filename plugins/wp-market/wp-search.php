@@ -75,7 +75,7 @@ class WPCustomSearch {
       ?>
         <style type="text/css">
             .hidden {display:none;}
-            input#zipcode {border:1px solid silver!important;}
+            input#zipcode {border:1px solid silver!important;width:100px;}
             .border-top {border-top:1px solid silver;}
 
             ul.markets, ul.markets li  {list-style: none!important;margin:0!important;padding:0!important;}
@@ -86,16 +86,20 @@ class WPCustomSearch {
             }
             ul.markets li:hover {border:1px solid silver;}
             ul.markets li a {text-decoration:none!important;color:#000!important;text-transform: capitalize; }
-            .markets-count { border-top:1px solid silver;margin-top:2rem;padding-top:1rem;font-size:1.3rem;font-weight: bold;}
+            .markets-count { font-size:1.3rem;font-weight: bold;}
+            .markets-select {max-width:100%;}
+            .searchbox {display:flex;padding:0 1.5rem;}
+            .mapbox {width:100%;height:80vh;}
+            #search-filters {position:relative;margin-bottom:1.5rem;}
+            .search-filters-edit-link {position:absolute;top:.5rem;right:0;padding:.7rem;background:none!important;color:#000!important;border:1px #000 silver;opacity:.4;}
+            .search-filters-edit-link:hover {opacity:.8;}
         </style>
 
-        <div style="display:flex;">
-            <div class="col" style="min-width:35%;">
-                <button id = "find-me" style="width:100%;"><span class="dashicons dashicons-location"></span> Rechercher les marchés alentours</button><br/>
-                
-                <p id = "status"></p>
+        <div class="searchbox" >
+            <div class="col" style="min-width:350px;">
 
                 <div class="form-location hidden" style="margin:1.5rem 0;">
+                    <p>Veuillez saisir votre code postal.</p>
                     <form action="" method="post" id="form-zipcode">
                         <label for="zipcode"></label>
                         <input id="zipcode" type="text" maxlength="5" name="zipcode" placeholder="Code Postal" value="">
@@ -107,25 +111,29 @@ class WPCustomSearch {
                             <option value="40">40 Km</option>
                             <option value="50" selected>50 Km</option>
                         </select>
-                        <button type="submit"><span class="dashicons dashicons-search"></span> Valider</button>
+                        <button type="submit"><span class="dashicons dashicons-search"></span></button>
                     </form>
                 </div>
                 
 
-                <div id = "search-filters">
+                <div id="search-filters">                    
                     <p class="search-filters-text" style="margin-bottom:0;"></p>
-                    <a class="search-filters-edit-link hidden" href="">Modifier ma recherche</a>
+                    <button class="search-filters-edit-link hidden button button-secondary"><span class="dashicons dashicons-edit"></span></button>
                 </div>
 
+                <button id="find-me" style="width:100%;"><span class="dashicons dashicons-location"></span> Rechercher les marchés alentours</button><br/>
+                
+                <p id="status"></p>
 
                 <div class="markets-container">
-                    <div class="markets-count"></div>
+                    <div class="markets-count"></div>                    
+                    <select class="markets-select hidden"></select>
                     <ul class="markets"></ul>
                 </div>
             </div>
             <div class="col" style="width:100%;margin-left:2rem;">
-                <div id = "map" style="height:450px;width:100%;"></div>
-                <div id = "googlemap" style="height:250px;"></div>
+                <div id="map" class="mapbox" ></div>
+                <div id="googlemap" class="mapbox"></div>
             </div>
      </div>
 

@@ -44,7 +44,6 @@ function geoLocation() {
   // location by browser not ok
   function error() {
     //status.textContent = 'Echec de la localisation.';
-    status.textContent = 'Veuillez saisir votre code postal.';
     formzip.classList.remove('hidden');
   }
 
@@ -81,6 +80,7 @@ function getMarkets( latitute, longitude, distance ) {
   const filters = document.querySelector('.search-filters-text');
   const filtersLink = document.querySelector('.search-filters-edit-link');
   const markets = document.querySelector('ul.markets');
+  const marketsSelect = document.querySelector('.markets-select');
 
   if(!distance) { distance = distanceDefault; }
   
@@ -95,7 +95,8 @@ function getMarkets( latitute, longitude, distance ) {
   status.textContent = 'Recherche des marchés à proximité';
   markets.innerHTML = '';
 
-  filters.innerHTML = 'Votre position :  '+ latitute +', '+longitude;
+  filters.innerHTML = '<h2>Votre recherche</h2>';
+  filters.innerHTML += 'Votre position :  '+ latitute +', '+longitude;
   filters.innerHTML += '<br>Distance : '+distance+' Km.'; 
 
 
@@ -118,10 +119,11 @@ function getMarkets( latitute, longitude, distance ) {
       // update contents
       data.forEach( item => {
         markets.innerHTML += '<li><a href="">'+item.post_title+'</a><br>Distance : '+Number(item.distance).toFixed(2)+' Km</li>';
+        marketsSelect.innerHTML += '<option value="">'+item.post_title+' (Distance : '+Number(item.distance).toFixed(2)+' Km)</option>';
       })
 
       document.querySelector('.markets-count').textContent = data.length+' résultats';
-
+      marketsSelect.classList.remove('hidden');
 
       // Load / refresh map
         if(GoogleMapAPIkey) {
@@ -219,3 +221,7 @@ document.querySelector('#find-me').addEventListener('click', geoLocation);
 // button : form zipcode submit
 document.querySelector('#form-zipcode').addEventListener('submit', getLocationByZipcode, false);
 
+document.querySelector('.search-filters-edit-link').addEventListener('click', function() {
+  document.querySelector('.form-location').classList.remove('hidden');
+  document.querySelector('#search-filters').classList.add('hidden');
+}, false);
