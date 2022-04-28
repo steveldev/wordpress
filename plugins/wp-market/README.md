@@ -1,5 +1,5 @@
 # WP MARKET
-
+  
 ## Installation
 - Install WP
 
@@ -9,6 +9,8 @@
 - Add plugins : Woocommerce
 
 ## Custom plugins
+
+Note :  Plugin prefix match core type (wp = wordpress, wc = woocommerce)  
 
 ### wp-market : 
 - Create custom post type market 
