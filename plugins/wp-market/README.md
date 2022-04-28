@@ -25,6 +25,7 @@
 - Search Market from location
 - Geolocation
 - OpenStreetMap / GoogleMap
+- Add shortcode [search_market]
 
 ### wp-shipping-zones-market : 
 - Add Menus "Points de vente" + "Market"
