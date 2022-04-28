@@ -27,7 +27,13 @@
 - OpenStreetMap / GoogleMap
 - Add shortcode [search_market]
 
-### wp-shipping-zones-market : 
+### wc-shipping-zones-market : 
 - Add Menus "Points de vente" + "Market"
 - Add Submenu "Market" in Woocommerce > Settings > Shipping
 - Add form market : user can link a market with the store
+
+### wc-user-services-manager
+- Add user account menu items (services, assistance, parrainage)
+- User account pages "services" : list current payed services a button action
+- User account pages "assistance" : TO DO
+- User account pages "parrainage" : TO DO
