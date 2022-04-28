@@ -121,9 +121,6 @@ class WCShippingZonesMarket {
                 'type' => 'sectionend', 
                 'id' => 'market' 
             );
- 
-            
-            if(empty( $this->store_zipcode ) ) return $settings;
 
             return $settings;
         
