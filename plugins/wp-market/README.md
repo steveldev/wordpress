@@ -36,6 +36,6 @@ Note :  Plugin prefix match core type (wp = wordpress, wc = woocommerce)
 
 ### wc-user-services-manager
 - Add user account menu items (services, assistance, parrainage)
-- User account pages "services" : list current payed services a button action
+- User account pages "services" : list services and matching button action
 - User account pages "assistance" : TO DO
 - User account pages "parrainage" : TO DO
