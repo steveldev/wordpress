@@ -39,4 +39,4 @@ Note :  Plugin prefix match core type (wp = wordpress, wc = woocommerce)
 - User account page "services" : list services and matching button action
 - User account page "assistance" : TO DO
 - User account page "parrainage" : TO DO
-- Service Configuration page "parrainage" : TO DO
+- Service Configuration page : TO DO
