@@ -13,7 +13,7 @@
 Note :  Plugin prefix match core type (wp = wordpress, wc = woocommerce)  
 
 ### wp-market : 
-- Create custom post type market 
+- Create custom post type market and metaboxes
 - Add menu : Markets
 
 ### wp-market-api :  
