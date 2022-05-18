@@ -8,5 +8,4 @@
  * Update URI: http://localhost/wp-json/api/wp-plugins
  *
  */
- require(__DIR__.'/includes/class-plugin-updater-client.php');
 ?>
