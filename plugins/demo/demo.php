@@ -1,10 +1,12 @@
 <?php
 /**
-* Plugin Name: Demo Plugin
-* Description: Demo plugin description
-* Author: Steve LERAT
-* Author URI: https://reseau-net.fr
-*/
+ * Plugin Name: Demo
+ * Author: Steve LERAT (contact@reseau-net.fr)
+ * Author URI: https://reseau-net.fr
+ * Version: 1.0
+ * Plugin URI: https://dev.reseau-net.fr/wp-json/api/wp-plugins
+ * Update URI: http://localhost/wp-json/api/wp-plugins
+ *
+ */
+ require(__DIR__.'/includes/class-plugin-updater-client.php');
 ?>
-
-Hello world !
