@@ -13,7 +13,7 @@ https://github.com/WordPress/WordPress-Coding-Standards
 - ***Install Wordpress Coding Standard***  
 ```git clone -b master https://github.com/WordPress/WordPress-Coding-Standards.git wpcs```
 
-- *** Code sniffer settings  
+- ***Code sniffer settings  
 ```phpcs --config-set installed_paths /path/to/wpcs```
 
 ***Usage***  
