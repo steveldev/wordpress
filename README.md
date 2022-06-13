@@ -17,8 +17,8 @@ https://github.com/WordPress/WordPress-Coding-Standards
 ```phpcs --config-set installed_paths /path/to/wpcs```
 
 ***Usage***  
-phpcs <filepath>  
-phpcbf <filepath/direcory)  
+phpcs filepath  
+phpcbf filepath/direcory 
                            
                            
 
