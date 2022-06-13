@@ -16,7 +16,7 @@ https://github.com/WordPress/WordPress-Coding-Standards
 - *** Code sniffer settings  
 ```phpcs --config-set installed_paths /path/to/wpcs```
 
-***Usage ***  
+***Usage***  
 phpcs <filepath>  
 phpcbf <filepath/direcory)  
                            
