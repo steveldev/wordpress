@@ -2,7 +2,7 @@
 
 ## 1. Export existing site
 
-### 1.1 Export your site datas 
+### 1.1 Export site datas 
 Tools > export
 
 ### 1.2 Export Theme and plugins configurations
