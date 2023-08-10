@@ -9,7 +9,7 @@ Tools > export
 
 ## Import in multisite
 
-## Import site datas
+### Import site datas
 Tools > import
 
 ### Import Theme and plugins configurations
