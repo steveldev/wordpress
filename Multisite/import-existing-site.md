@@ -1,18 +1,18 @@
 #  Import existing wordpress in multisite
 
-## Export existing site
+## 1. Export existing site
 
-### Export your site datas 
+### 1.1 Export your site datas 
 Tools > export
 
-### Export Theme and plugins configurations
+### 1.2 Export Theme and plugins configurations
 
-## Import in multisite
+## 2. Import in multisite
 
-### Import site datas
+### 2.1 Import site datas
 Tools > import
 
-### Import Theme and plugins configurations
+### 2.2 Import Theme and plugins configurations
 
 # Note : 
 same theme and plugins must be installed and activate on multisite
